@@ -202,6 +202,11 @@ function PreviewSection({
 
   function handleBuyClick() {
     setTab(hasDateStep ? 'date' : 'tickets');
+    const section = document.querySelector('.tt-preview-section');
+    if (section) {
+      const top = section.getBoundingClientRect().top + window.scrollY - 16;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
   }
 
   function pickDate(iso: string) {
