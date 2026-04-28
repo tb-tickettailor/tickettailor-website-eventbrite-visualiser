@@ -168,7 +168,7 @@ $white: #FFFFFF;
 .tt-theme-dropdown {
   margin-left: auto;
   position: relative;
-  z-index: 200;
+  z-index: 100000;
 
   &__trigger {
     display: inline-flex;
@@ -216,7 +216,7 @@ $white: #FFFFFF;
     background: $white;
     border-radius: 14px;
     padding: 0.9rem;
-    z-index: 1000;
+    z-index: 100001;
     box-shadow: 0 24px 60px -12px rgba($navy, 0.28), 0 6px 16px rgba($navy, 0.1);
     border: 1px solid rgba($navy, 0.06);
     animation: tt-dropdown-in 0.15s ease;
@@ -292,7 +292,7 @@ $white: #FFFFFF;
   gap: 0.25rem;
   padding: 0 0.5rem;
   position: relative;
-  z-index: 200;
+  z-index: 100000;
 
   .tt-preview-tab {
     flex: 0 0 auto;
