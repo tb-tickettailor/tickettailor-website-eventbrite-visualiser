@@ -31,6 +31,15 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<EventbritePreview | null>(SAMPLE_PREVIEW);
   const [hasUserPreview, setHasUserPreview] = useState(false);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!hasUserPreview) return;
+    const el = previewRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 16;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }, [hasUserPreview]);
   const [theme, setTheme] = useState<ThemeId>(DEFAULT_THEME);
   const [showCaptcha, setShowCaptcha] = useState(false);
   const turnstileRef = useRef<TurnstileInstance | null>(null);
@@ -155,12 +164,14 @@ export default function Home() {
       </section>
 
       {preview ? (
-        <PreviewSection
-          preview={preview}
-          theme={theme}
-          setTheme={setTheme}
-          hasUserPreview={hasUserPreview}
-        />
+        <div ref={previewRef}>
+          <PreviewSection
+            preview={preview}
+            theme={theme}
+            setTheme={setTheme}
+            hasUserPreview={hasUserPreview}
+          />
+        </div>
       ) : null}
 
       <footer className="tt-footer">
