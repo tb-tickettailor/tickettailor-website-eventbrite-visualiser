@@ -158,37 +158,68 @@ $white: #FFFFFF;
 }
 
 
-// Sidebar rail of theme thumbnails
-.tt-preview-layout {
+.tt-preview-main {
   max-width: 1280px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 1.5rem;
-  align-items: start;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
 }
 
-.tt-theme-rail {
-  position: sticky;
-  top: 1rem;
-  background: $white;
-  border-radius: 0 16px 16px 0;
-  padding: 1.25rem 1rem 1.25rem 1.5rem;
-  margin-left: -24px;
-  box-shadow: 0 12px 40px -8px rgba($navy, 0.18), 0 2px 8px rgba($navy, 0.08);
+// Theme dropdown — sits on the right side of the tabs
+.tt-theme-dropdown {
+  margin-left: auto;
+  position: relative;
+  z-index: 200;
 
-  &__title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  &__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1rem;
+    background: $white;
+    border: 1px solid rgba($navy, 0.12);
+    border-radius: 100vw;
+    color: $navy;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:hover { border-color: $navy; }
+    &[aria-expanded="true"] {
+      border-color: $navy;
+      box-shadow: 0 0 0 3px rgba($navy, 0.1);
+    }
+
+    i { font-size: 0.75rem; transition: transform 0.15s; }
+    &[aria-expanded="true"] i { transform: rotate(180deg); }
+  }
+
+  &__trigger-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  &__trigger-prefix {
+    font-weight: 500;
     color: rgba($navy, 0.55);
-    margin: 0 0 0.75rem;
-    padding-left: 0.25rem;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  &__panel {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 460px;
+    max-width: calc(100vw - 2rem);
+    background: $white;
+    border-radius: 14px;
+    padding: 0.9rem;
+    z-index: 1000;
+    box-shadow: 0 24px 60px -12px rgba($navy, 0.28), 0 6px 16px rgba($navy, 0.1);
+    border: 1px solid rgba($navy, 0.06);
+    animation: tt-dropdown-in 0.15s ease;
   }
 
   &__list {
@@ -204,14 +235,12 @@ $white: #FFFFFF;
       border-radius: 10px;
       overflow: hidden;
     }
-
-    @media (max-width: 900px) {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    @media (max-width: 600px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
+}
+
+@keyframes tt-dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .tt-theme-card {
@@ -234,7 +263,6 @@ $white: #FFFFFF;
     aspect-ratio: 16 / 11;
     object-fit: cover;
     object-position: top;
-    object-fit: cover;
     background: $gray;
     display: block;
   }
@@ -258,16 +286,13 @@ $white: #FFFFFF;
   }
 }
 
-.tt-preview-main {
-  min-width: 0;
-  margin-right: -24px;
-}
-
 .tt-preview-tabs {
   display: flex;
   align-items: flex-start;
   gap: 0.25rem;
   padding: 0 0.5rem;
+  position: relative;
+  z-index: 200;
 
   .tt-preview-tab {
     flex: 0 0 auto;
@@ -304,21 +329,13 @@ $white: #FFFFFF;
     }
   }
 
-  &__cta {
-    margin-left: auto;
-    margin-bottom: 0.4rem;
-
-    @media (max-width: 900px) {
-      display: none !important;
-    }
-  }
 }
 
 .tt-preview-frame {
   background: var(--background-color, #{$white});
   color: var(--text-color, #1c232b);
   font-family: var(--font-family, inherit);
-  border-radius: 10px 0 0 0;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 24px 64px -16px rgba($navy, 0.25), 0 6px 16px rgba($navy, 0.08);
   min-height: 400px;
@@ -623,9 +640,12 @@ $white: #FFFFFF;
           transition: box-shadow 0.2s;
 
           &:after {
-            content: '→';
-            font-size: 1rem;
-            font-weight: bold;
+            content: '\f061';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 0.85rem;
+            font-style: normal;
+            line-height: 1;
           }
         }
 
@@ -825,8 +845,10 @@ $white: #FFFFFF;
   }
 
   &__label {
-    font-size: 0.95rem;
-    color: rgba($navy, 0.78);
+    font-family: var(--font-coustard), Georgia, serif;
+    font-weight: 900;
+    font-size: 1rem;
+    color: $navy;
     @media (max-width: 600px) { display: none; }
   }
 }

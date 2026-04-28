@@ -291,9 +291,30 @@ function jsonLdToPreview(
     isOnline:
       isOnline ||
       event.eventAttendanceMode?.toLowerCase().includes('online') === true,
-    imageUrl: image,
+    imageUrl: upscaleImage(image),
     sourceUrl
   };
+}
+
+// Eventbrite proxies preview images via img.evbuc.com with width caps and a
+// signed checksum. Pull the original cdn.evbuc.com URL out of the proxy path
+// so we get the full-resolution image, no checksum mismatch.
+function upscaleImage(url: string | null): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    if (u.hostname === 'img.evbuc.com') {
+      // The proxy path is the URL-encoded original cdn URL.
+      const pathname = u.pathname.replace(/^\//, '');
+      const decoded = decodeURIComponent(pathname);
+      if (decoded.startsWith('https://cdn.evbuc.com/')) {
+        return decoded;
+      }
+    }
+  } catch {
+    // fall through to original
+  }
+  return url;
 }
 
 function pickImage(image: JsonLdEvent['image']): string | null {

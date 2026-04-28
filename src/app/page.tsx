@@ -17,6 +17,8 @@ import {
   useOccurrences
 } from '@/components/CheckoutViews';
 import Logo from '@/components/Logo';
+import { ThemeDropdown } from '@/components/ThemeDropdown';
+import { SAMPLE_PREVIEW } from '@/lib/samplePreview';
 
 const SIGN_UP_URL = 'https://app.tickettailor.com/sign-up';
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
@@ -27,7 +29,8 @@ export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<EventbritePreview | null>(null);
+  const [preview, setPreview] = useState<EventbritePreview | null>(SAMPLE_PREVIEW);
+  const [hasUserPreview, setHasUserPreview] = useState(false);
   const [theme, setTheme] = useState<ThemeId>(DEFAULT_THEME);
   const [showCaptcha, setShowCaptcha] = useState(false);
   const turnstileRef = useRef<TurnstileInstance | null>(null);
@@ -60,7 +63,6 @@ export default function Home() {
   async function submitFetch(turnstileToken?: string) {
     setLoading(true);
     setError(null);
-    setPreview(null);
 
     try {
       const res = await fetch('/api/fetch-eventbrite', {
@@ -79,6 +81,7 @@ export default function Home() {
         return;
       }
       setPreview(data.preview as EventbritePreview);
+      setHasUserPreview(true);
       // Captcha succeeded (if shown) — hide it for next time.
       setShowCaptcha(false);
       turnstileRef.current?.reset();
@@ -151,7 +154,14 @@ export default function Home() {
         </div>
       </section>
 
-      {preview ? <PreviewSection preview={preview} theme={theme} setTheme={setTheme} /> : null}
+      {preview ? (
+        <PreviewSection
+          preview={preview}
+          theme={theme}
+          setTheme={setTheme}
+          hasUserPreview={hasUserPreview}
+        />
+      ) : null}
 
       <footer className="tt-footer">
         Standalone preview · powered by <a href="https://www.tickettailor.com">Ticket Tailor</a>
@@ -163,11 +173,13 @@ export default function Home() {
 function PreviewSection({
   preview,
   theme,
-  setTheme
+  setTheme,
+  hasUserPreview
 }: {
   preview: EventbritePreview;
   theme: ThemeId;
   setTheme: (t: ThemeId) => void;
+  hasUserPreview: boolean;
 }) {
   const occurrences = useOccurrences(preview);
   const hasDateStep = occurrences.length > 1;
@@ -176,15 +188,6 @@ function PreviewSection({
   const [selectedOccurrenceIso, setSelectedOccurrenceIso] = useState<string | null>(
     occurrences[0]?.startIso ?? null
   );
-  const [showStickyCta, setShowStickyCta] = useState(false);
-
-  useEffect(() => {
-    const threshold = 600;
-    const onScroll = () => setShowStickyCta(window.scrollY > threshold);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   function handleBuyClick() {
     setTab(hasDateStep ? 'date' : 'tickets');
@@ -199,71 +202,40 @@ function PreviewSection({
     occurrences.find((o) => o.startIso === selectedOccurrenceIso) ?? occurrences[0] ?? null;
 
   return (
+    <>
     <section className="tt-preview-section">
-      <div className="tt-preview-layout">
-        <aside className="tt-theme-rail" aria-label="Choose a theme">
-          <div className="tt-theme-rail__title">Choose a theme</div>
-          <ul className="tt-theme-rail__list">
-            {THEMES.map((t) => (
-              <li key={t.id}>
-                <button
-                  type="button"
-                  className={`tt-theme-card${theme === t.id ? ' tt-theme-card--active' : ''}`}
-                  onClick={() => setTheme(t.id)}
-                  aria-pressed={theme === t.id}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/themes/thumbnails/${t.id}.png`}
-                    alt=""
-                    className="tt-theme-card__thumb"
-                  />
-                  <span className="tt-theme-card__label">{t.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </aside>
-
-        <div className="tt-preview-main">
-          <nav className="tt-preview-tabs" role="tablist" aria-label="Preview view">
+      <div className="tt-preview-main">
+        <nav className="tt-preview-tabs" role="tablist" aria-label="Preview view">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'page'}
+            className={`tt-preview-tab${tab === 'page' ? ' tt-preview-tab--active' : ''}`}
+            onClick={() => setTab('page')}
+          >
+            <i className="fa-solid fa-image" aria-hidden="true" /> Event page
+          </button>
+          {hasDateStep ? (
             <button
               type="button"
               role="tab"
-              aria-selected={tab === 'page'}
-              className={`tt-preview-tab${tab === 'page' ? ' tt-preview-tab--active' : ''}`}
-              onClick={() => setTab('page')}
+              aria-selected={tab === 'date'}
+              className={`tt-preview-tab${tab === 'date' ? ' tt-preview-tab--active' : ''}`}
+              onClick={() => setTab('date')}
             >
-              <i className="fa-solid fa-image" aria-hidden="true" /> Event page
+              <i className="fa-solid fa-calendar-days" aria-hidden="true" /> Pick a date
             </button>
-            {hasDateStep ? (
-              <button
-                type="button"
-                role="tab"
-                aria-selected={tab === 'date'}
-                className={`tt-preview-tab${tab === 'date' ? ' tt-preview-tab--active' : ''}`}
-                onClick={() => setTab('date')}
-              >
-                <i className="fa-solid fa-calendar-days" aria-hidden="true" /> Pick a date
-              </button>
-            ) : null}
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === 'tickets'}
-              className={`tt-preview-tab${tab === 'tickets' ? ' tt-preview-tab--active' : ''}`}
-              onClick={() => setTab('tickets')}
-            >
-              <i className="fa-solid fa-ticket" aria-hidden="true" /> Tickets
-            </button>
-            <a
-              className="tt-button tt-button--peach tt-preview-tabs__cta"
-              href={SIGN_UP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Publish on Ticket Tailor
-            </a>
+          ) : null}
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'tickets'}
+            className={`tt-preview-tab${tab === 'tickets' ? ' tt-preview-tab--active' : ''}`}
+            onClick={() => setTab('tickets')}
+          >
+            <i className="fa-solid fa-ticket" aria-hidden="true" /> Tickets
+          </button>
+          <ThemeDropdown theme={theme} setTheme={setTheme} />
           </nav>
 
           <div className="tt-preview-frame">
@@ -306,9 +278,8 @@ function PreviewSection({
             ) : null}
           </div>
         </div>
-      </div>
-
-      <div className={`tt-sticky-cta${showStickyCta ? ' tt-sticky-cta--visible' : ''}`}>
+      </section>
+      <div className={`tt-sticky-cta${hasUserPreview ? ' tt-sticky-cta--visible' : ''}`}>
         <span className="tt-sticky-cta__label">
           Like what you see? Get your event live in minutes.
         </span>
@@ -321,6 +292,6 @@ function PreviewSection({
           Publish on Ticket Tailor
         </a>
       </div>
-    </section>
+    </>
   );
 }
