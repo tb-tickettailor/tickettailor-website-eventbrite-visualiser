@@ -1,0 +1,326 @@
+'use client';
+
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import type { EventbritePreview } from '@/lib/eventbrite';
+import {
+  DEFAULT_THEME,
+  THEMES,
+  headerVariationFor,
+  themeStylesheetUrl,
+  type ThemeId
+} from '@/lib/themes';
+import { EventPreview } from '@/components/EventPreview';
+import {
+  SelectDateView,
+  SelectTicketsView,
+  useOccurrences
+} from '@/components/CheckoutViews';
+import Logo from '@/components/Logo';
+
+const SIGN_UP_URL = 'https://app.tickettailor.com/sign-up';
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
+
+type PreviewTab = 'page' | 'date' | 'tickets';
+
+export default function Home() {
+  const [url, setUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<EventbritePreview | null>(null);
+  const [theme, setTheme] = useState<ThemeId>(DEFAULT_THEME);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const turnstileRef = useRef<TurnstileInstance | null>(null);
+
+  useEffect(() => {
+    const id = 'tt-theme-stylesheet';
+    let style = document.getElementById(id) as HTMLStyleElement | null;
+    if (!style) {
+      style = document.createElement('style');
+      style.id = id;
+      document.head.appendChild(style);
+    }
+    let cancelled = false;
+    fetch(themeStylesheetUrl(theme))
+      .then((r) => r.text())
+      .then((css) => {
+        if (cancelled || !style) return;
+        // Scope the theme to .tt-preview-frame so its CSS variables and `body`
+        // rules don't leak onto the marketing wrapper.
+        style.textContent = css
+          .replace(/:root\b/g, '.tt-preview-frame')
+          .replace(/(^|\s|,)body\b/g, '$1.tt-preview-frame');
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [theme]);
+
+  async function submitFetch(turnstileToken?: string) {
+    setLoading(true);
+    setError(null);
+    setPreview(null);
+
+    try {
+      const res = await fetch('/api/fetch-eventbrite', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ url, turnstileToken })
+      });
+      const data = await res.json();
+      if (res.status === 429 && data.requiresCaptcha) {
+        setShowCaptcha(true);
+        setError(data.error ?? 'Please complete the check below to continue.');
+        return;
+      }
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong');
+        return;
+      }
+      setPreview(data.preview as EventbritePreview);
+      // Captcha succeeded (if shown) — hide it for next time.
+      setShowCaptcha(false);
+      turnstileRef.current?.reset();
+    } catch {
+      setError('Network error — check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (showCaptcha) return; // wait for the captcha callback
+    submitFetch();
+  }
+
+  function handleCaptchaSuccess(token: string) {
+    submitFetch(token);
+  }
+
+  return (
+    <div className="tt-site">
+      <header className="tt-header">
+        <div className="tt-header__inner">
+          <a className="tt-header__logo" href="https://www.tickettailor.com" aria-label="Ticket Tailor">
+            <Logo />
+          </a>
+          <nav className="tt-header__nav" aria-label="Primary">
+            <a href="https://www.tickettailor.com/features/">Features</a>
+            <a href="https://www.tickettailor.com/pricing/">Pricing</a>
+            <a href="https://www.tickettailor.com/about/">About</a>
+          </nav>
+          <a className="tt-button tt-button--navy" href={SIGN_UP_URL} target="_blank" rel="noopener noreferrer">
+            Sign up free
+          </a>
+        </div>
+      </header>
+
+      <section className="tt-hero">
+        <div className="tt-hero__inner">
+          <h1>See your Eventbrite event on Ticket Tailor</h1>
+          <p>Paste your Eventbrite URL and preview it instantly in any of our most-loved themes.</p>
+
+          <form className="tt-form" onSubmit={handleSubmit}>
+            <input
+              type="url"
+              required
+              placeholder="https://www.eventbrite.com/e/..."
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              disabled={loading}
+              aria-label="Eventbrite URL"
+            />
+            <button className="tt-button tt-button--navy" type="submit" disabled={loading || url.length === 0}>
+              {loading ? 'Loading…' : 'Preview it'}
+            </button>
+          </form>
+
+          {error ? <div className="tt-error" role="alert">{error}</div> : null}
+          {showCaptcha && TURNSTILE_SITE_KEY ? (
+            <div className="tt-captcha">
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={TURNSTILE_SITE_KEY}
+                onSuccess={handleCaptchaSuccess}
+                options={{ theme: 'light' }}
+              />
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {preview ? <PreviewSection preview={preview} theme={theme} setTheme={setTheme} /> : null}
+
+      <footer className="tt-footer">
+        Standalone preview · powered by <a href="https://www.tickettailor.com">Ticket Tailor</a>
+      </footer>
+    </div>
+  );
+}
+
+function PreviewSection({
+  preview,
+  theme,
+  setTheme
+}: {
+  preview: EventbritePreview;
+  theme: ThemeId;
+  setTheme: (t: ThemeId) => void;
+}) {
+  const occurrences = useOccurrences(preview);
+  const hasDateStep = occurrences.length > 1;
+
+  const [tab, setTab] = useState<PreviewTab>('page');
+  const [selectedOccurrenceIso, setSelectedOccurrenceIso] = useState<string | null>(
+    occurrences[0]?.startIso ?? null
+  );
+  const [showStickyCta, setShowStickyCta] = useState(false);
+
+  useEffect(() => {
+    const threshold = 600;
+    const onScroll = () => setShowStickyCta(window.scrollY > threshold);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  function handleBuyClick() {
+    setTab(hasDateStep ? 'date' : 'tickets');
+  }
+
+  function pickDate(iso: string) {
+    setSelectedOccurrenceIso(iso);
+    setTab('tickets');
+  }
+
+  const selectedOccurrence =
+    occurrences.find((o) => o.startIso === selectedOccurrenceIso) ?? occurrences[0] ?? null;
+
+  return (
+    <section className="tt-preview-section">
+      <div className="tt-preview-layout">
+        <aside className="tt-theme-rail" aria-label="Choose a theme">
+          <div className="tt-theme-rail__title">Choose a theme</div>
+          <ul className="tt-theme-rail__list">
+            {THEMES.map((t) => (
+              <li key={t.id}>
+                <button
+                  type="button"
+                  className={`tt-theme-card${theme === t.id ? ' tt-theme-card--active' : ''}`}
+                  onClick={() => setTheme(t.id)}
+                  aria-pressed={theme === t.id}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/themes/thumbnails/${t.id}.png`}
+                    alt=""
+                    className="tt-theme-card__thumb"
+                  />
+                  <span className="tt-theme-card__label">{t.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </aside>
+
+        <div className="tt-preview-main">
+          <nav className="tt-preview-tabs" role="tablist" aria-label="Preview view">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'page'}
+              className={`tt-preview-tab${tab === 'page' ? ' tt-preview-tab--active' : ''}`}
+              onClick={() => setTab('page')}
+            >
+              <i className="fa-solid fa-image" aria-hidden="true" /> Event page
+            </button>
+            {hasDateStep ? (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={tab === 'date'}
+                className={`tt-preview-tab${tab === 'date' ? ' tt-preview-tab--active' : ''}`}
+                onClick={() => setTab('date')}
+              >
+                <i className="fa-solid fa-calendar-days" aria-hidden="true" /> Pick a date
+              </button>
+            ) : null}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'tickets'}
+              className={`tt-preview-tab${tab === 'tickets' ? ' tt-preview-tab--active' : ''}`}
+              onClick={() => setTab('tickets')}
+            >
+              <i className="fa-solid fa-ticket" aria-hidden="true" /> Tickets
+            </button>
+            <a
+              className="tt-button tt-button--peach tt-preview-tabs__cta"
+              href={SIGN_UP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Publish on Ticket Tailor
+            </a>
+          </nav>
+
+          <div className="tt-preview-frame">
+            <EventPreview
+              preview={preview}
+              onBuyClick={handleBuyClick}
+              headerVariation={headerVariationFor(theme)}
+            />
+            {tab !== 'page' ? (
+              <div
+                className="tt-checkout-overlay"
+                onClick={() => setTab('page')}
+                role="presentation"
+              >
+                <div className="tt-checkout-overlay__panel" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    type="button"
+                    className="tt-checkout-overlay__close"
+                    onClick={() => setTab('page')}
+                    aria-label="Close"
+                  >
+                    ×
+                  </button>
+                  {tab === 'date' ? (
+                    <SelectDateView
+                      event={preview}
+                      occurrences={occurrences}
+                      selectedIso={selectedOccurrenceIso}
+                      onPick={pickDate}
+                    />
+                  ) : (
+                    <SelectTicketsView
+                      event={preview}
+                      occurrence={selectedOccurrence}
+                      onBack={hasDateStep ? () => setTab('date') : undefined}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      <div className={`tt-sticky-cta${showStickyCta ? ' tt-sticky-cta--visible' : ''}`}>
+        <span className="tt-sticky-cta__label">
+          Like what you see? Get your event live in minutes.
+        </span>
+        <a
+          className="tt-button tt-button--peach"
+          href={SIGN_UP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Publish on Ticket Tailor
+        </a>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,107 @@
+@import url("/fonts/roboto/stylesheet.css");
+:root {
+  --baseline: 1.3888888889em;
+  --gutterMobile: calc(var(--baseline) * .75);
+  --gutterTablet: calc(var(--baseline) * 2);
+  --gutterDesktop: calc(var(--baseline) * 2);
+  --actionsWidth: 22em;
+  --contentWidth: calc(100% - var(--actionsWidth) - var(--gutterDesktop));
+  --containerMaxWidth: 1240px;
+  --button-font-size-large: 1.1em;
+  --button-font-weight-large: 600; }
+  @media (max-width: 30em) {
+    :root {
+      --button-font-size-large: 1.2em; } }
+
+:root {
+  --baseline: 1.3888888889em;
+  --gutterMobile: calc(var(--baseline) * .75);
+  --gutterTablet: calc(var(--baseline) * 2);
+  --gutterDesktop: calc(var(--baseline) * 2);
+  --actionsWidth: 22em;
+  --contentWidth: calc(100% - var(--actionsWidth) - var(--gutterDesktop));
+  --containerMaxWidth: 1240px;
+  --button-font-size-large: 1.1em;
+  --button-font-weight-large: 600; }
+  @media (max-width: 30em) {
+    :root {
+      --button-font-size-large: 1.2em; } }
+
+:root {
+  --background-color: #fff;
+  --text-color: #222;
+  --highlight-color: #fff;
+  --default-border-color: color-mix(in srgb, var(--text-color) 12%, transparent);
+  --border-color: color-mix(in srgb, var(--text-color) 12%, transparent);
+  --font-family: 'Roboto', sans-serif;
+  --font-size-mobile: 14px;
+  --font-size-desktop: 15px;
+  --baseline: 1.3888888889em;
+  --heading-font-family: var(--font-family);
+  --heading-font-weight: 600;
+  --h1-font-size: 1.7522222222em;
+  --h1-line-height: 1.195307546em;
+  --h2-font-size: 1.5em;
+  --h2-line-height: 2.1851851852em;
+  --h3-font-size: 1.2em;
+  --h3-line-height: 1.3em;
+  --h4-font-size: 1em;
+  --h4-line-height: 2.1666666667em;
+  --button-font-size: 0.8888888889em;
+  --button-min-width: 100px;
+  --button-padding: calc(var(--baseline) * .4) var(--baseline);
+  --button-padding-large: calc(var(--baseline) * .8) var(--baseline) calc(var(--baseline) * .85);
+  --button-primary-background: var(--text-color);
+  --button-primary-color: var(--background-color);
+  --filter-field-border-color: var(--border-color);
+  --filter-field-border: 1px solid var(--filter-field-border-color);
+  --filter-field-border-radius: 4px;
+  --image-border-radius: 4px;
+  --hero-image-border-radius: 6px; }
+  @media (min-width: 63.75em) {
+    :root {
+      --h1-font-size: 3.0555555556em;
+      --h1-line-height: 1.0727272727em;
+      --h2-font-size: 2.5em;
+      --h2-line-height: 1.3111111111em;
+      --h3-font-size: 1.4em;
+      --h3-line-height: 1.5em;
+      --h4-font-size: 1em;
+      --h4-line-height: 1.3888888889em; } }
+
+.main-events-listing {
+  background: none; }
+
+section[data-variation="list"] .event {
+  box-shadow: 1px 1px 23px 0px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 7px; }
+
+.hero:not([data-variation="text-only"]):not([data-variation="side-by-side"]):not([data-variation="side-by-side-reverse"]) + .main-events-listing:before {
+  border-top: 1px solid var(--border-color); }
+
+.newsletter-signup input,
+.newsletter-signup button {
+  padding-block: 1em 1.2em; }
+
+@media (min-width: 63.75em) {
+  .detail-actions {
+    box-shadow: 1px 1px 23px 0px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 7px; } }
+
+@media (min-width: 30em) {
+  body:not(.custom--no_borders) section[data-variation="list"] .event__image {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0; } }
+ul.__design_studio_mode__event_listings li:nth-of-type(1) .event__image,
+ul.__design_studio_mode__event_listings li .event__image--placeholder-1 {
+  background-image: url("https://res.cloudinary.com/ticket-tailor/image/upload/v1744709898/production/userfiles/global/base-square-1.jpg"); }
+ul.__design_studio_mode__event_listings li:nth-of-type(2) .event__image,
+ul.__design_studio_mode__event_listings li .event__image--placeholder-2 {
+  background-image: url("https://res.cloudinary.com/ticket-tailor/image/upload/v1744709898/production/userfiles/global/base-square-2.jpg"); }
+ul.__design_studio_mode__event_listings li:nth-of-type(3) .event__image,
+ul.__design_studio_mode__event_listings li .event__image--placeholder-3 {
+  background-image: url("https://res.cloudinary.com/ticket-tailor/image/upload/v1744709898/production/userfiles/global/base-square-3.jpg"); }
+
+/*# sourceMappingURL=base.css.map */

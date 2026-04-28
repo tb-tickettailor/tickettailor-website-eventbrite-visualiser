@@ -1,0 +1,844 @@
+// Marketing wrapper styled to match tickettailor.com homepage:
+// navy/peach palette, Coustard headings, Open Sans body, pill buttons.
+
+$navy: #222432;
+$navy-soft: rgba(34, 36, 50, 0.3);
+$peach: #FFC7B9;
+$yellow: #FFDFA5;
+$orange: #F4917B;
+$gray: #FDF9F8;
+$light-gray: #FBF7F4;
+$white: #FFFFFF;
+
+.tt-site {
+  font-family: var(--font-open-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: $navy;
+  background: $white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px; // space for fixed CTA bar
+
+  *, *::before, *::after { box-sizing: border-box; }
+}
+
+// Header
+.tt-header {
+  background: $white;
+  border-bottom: 1px solid rgba($navy, 0.08);
+  padding: 1rem 0;
+
+  &__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__logo svg { display: block; height: 38px; width: auto; }
+
+  &__nav {
+    display: none;
+    gap: 1.75rem;
+    @media (min-width: 900px) { display: flex; }
+
+    a {
+      color: $navy;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      &:hover { opacity: 0.7; }
+    }
+  }
+}
+
+// Buttons
+.tt-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 100vw;
+  font-family: var(--font-coustard), Georgia, serif;
+  font-weight: 900;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+  line-height: 1;
+
+  &:hover { transform: scale(1.04); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  &--navy { background: $navy; color: $white; }
+  &--peach { background: $peach; color: $navy; }
+  &--yellow { background: $yellow; color: $navy; }
+  &--ghost {
+    background: transparent;
+    color: $navy;
+    border: 1px solid $navy-soft;
+    &:hover { border-color: $navy; }
+  }
+}
+
+// Hero
+.tt-hero {
+  background: $gray;
+  padding: 4rem 1.5rem 5rem;
+  text-align: center;
+  position: relative;
+
+  &__inner {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: var(--font-coustard), Georgia, serif;
+    font-weight: 900;
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    color: $navy;
+  }
+
+  p {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: rgba($navy, 0.78);
+    margin: 0 0 2.25rem;
+    line-height: 1.6;
+  }
+}
+
+.tt-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+
+  input[type="url"] {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.95rem 1.2rem;
+    font-size: 1rem;
+    border: 1px solid $navy-soft;
+    border-radius: 100vw;
+    background: $white;
+    font-family: inherit;
+    color: $navy;
+    &:focus { outline: none; border-color: $navy; }
+    &::placeholder { color: rgba($navy, 0.45); }
+  }
+}
+
+.tt-error {
+  max-width: 600px;
+  margin: 1rem auto 0;
+  padding: 0.85rem 1.25rem;
+  background: rgba($orange, 0.18);
+  border: 1px solid rgba($orange, 0.4);
+  color: #8a1a00;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+
+// Preview section
+.tt-preview-section {
+  padding: 3rem 1.5rem 4rem;
+  background: $light-gray;
+  flex: 1;
+}
+
+
+// Sidebar rail of theme thumbnails
+.tt-preview-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tt-theme-rail {
+  position: sticky;
+  top: 1rem;
+  background: $white;
+  border-radius: 0 16px 16px 0;
+  padding: 1.25rem 1rem 1.25rem 1.5rem;
+  margin-left: -24px;
+  box-shadow: 0 12px 40px -8px rgba($navy, 0.18), 0 2px 8px rgba($navy, 0.08);
+
+  &__title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba($navy, 0.55);
+    margin: 0 0 0.75rem;
+    padding-left: 0.25rem;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+
+    li {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (max-width: 600px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+.tt-theme-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: $white;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+
+  &__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    object-fit: cover;
+    object-position: top;
+    object-fit: cover;
+    background: $gray;
+    display: block;
+  }
+
+  &__label {
+    display: block;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $navy;
+  }
+
+  &:hover:not(.tt-theme-card--active) {
+    border-color: rgba($navy, 0.15);
+    transform: translateY(-1px);
+  }
+
+  &--active {
+    border-color: $navy;
+    box-shadow: 0 12px 32px -6px rgba($navy, 0.25), 0 4px 10px rgba($navy, 0.12);
+  }
+}
+
+.tt-preview-main {
+  min-width: 0;
+  margin-right: -24px;
+}
+
+.tt-preview-tabs {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+
+  .tt-preview-tab {
+    flex: 0 0 auto;
+    background: rgba($navy, 0.05);
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    padding: 0.85rem 1.5rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba($navy, 0.65);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.15s, color 0.15s;
+
+    i { font-size: 1rem; }
+
+    &:hover:not(:disabled):not(.tt-preview-tab--active) {
+      background: rgba($navy, 0.08);
+      color: $navy;
+    }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    &--active {
+      background: $white;
+      color: $navy;
+      border-color: rgba($navy, 0.08);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 -8px 20px -4px rgba($navy, 0.12);
+    }
+  }
+
+  &__cta {
+    margin-left: auto;
+    margin-bottom: 0.4rem;
+
+    @media (max-width: 900px) {
+      display: none !important;
+    }
+  }
+}
+
+.tt-preview-frame {
+  background: var(--background-color, #{$white});
+  color: var(--text-color, #1c232b);
+  font-family: var(--font-family, inherit);
+  border-radius: 10px 0 0 0;
+  overflow: hidden;
+  box-shadow: 0 24px 64px -16px rgba($navy, 0.25), 0 6px 16px rgba($navy, 0.08);
+  min-height: 400px;
+  position: relative;
+
+  .header__logo {
+    max-width: 375px;
+  }
+
+  // Override product full-bleed/full-bleed-under-header positioning so the
+  // hero is a self-sized block: the image fills behind, the text wrapper is
+  // overlaid on top (anchored bottom, height grows with content) — long titles
+  // simply make the wrapper taller instead of overflowing.
+  .hero[data-variation="full-bleed"],
+  .hero[data-variation="full-bleed-under-header"] {
+    position: relative;
+    display: block !important;
+    min-height: 360px;
+
+    .hero__slides__container {
+      width: 100%;
+      max-height: 480px;
+      overflow: hidden;
+    }
+    .hero__slides {
+      padding-top: 0 !important;
+    }
+    .hero__slide {
+      padding-top: 0 !important;
+      position: relative !important;
+      width: 100%;
+    }
+    .hero__slide-image {
+      position: relative !important;
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+    }
+    .hero__slide-image img {
+      position: relative !important;
+      width: 100%;
+      max-height: 480px;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .hero[data-variation="full-bleed"] .hero__wrapper,
+  .hero[data-variation="full-bleed-under-header"] .hero__wrapper {
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 1.5rem var(--gutterMobile, 1rem) !important;
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    color: #fff;
+    z-index: 2;
+    height: auto !important;
+
+    * {
+      text-align: center !important;
+    }
+
+    @media (min-width: 45em) {
+      padding: 2rem var(--gutterTablet, 2rem) !important;
+    }
+  }
+
+  .hero[data-variation="full-bleed"] .hero__content,
+  .hero[data-variation="full-bleed-under-header"] .hero__content {
+    color: #fff;
+    align-items: center;
+    width: 100%;
+    flex: 0 0 auto !important;
+  }
+
+  .hero[data-variation="full-bleed"] .hero__content__cta,
+  .hero[data-variation="full-bleed-under-header"] .hero__content__cta {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex: 0 0 auto !important;
+
+    .button,
+    > .button {
+      width: auto !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      flex: 0 0 auto !important;
+      align-self: center;
+    }
+  }
+}
+
+// Checkout overlay — sits on top of the event page like the real iframe modal.
+.tt-checkout-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+  z-index: 9999;
+  animation: overlay-in 0.2s ease;
+
+  &__panel {
+    background: #ffffff;
+    color: #1c232b;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 720px;
+    position: relative;
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25);
+    animation: overlay-panel-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(28, 35, 43, 0.06);
+    color: #1c232b;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    &:hover { background: rgba(28, 35, 43, 0.12); }
+  }
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes overlay-panel-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Checkout pane — mimics the real product widget look
+.checkout-pane {
+  // Reset all theme tokens so the checkout always renders in default styling
+  // regardless of the surrounding event-page theme.
+  --background-color: #ffffff;
+  --background-color-alt: #ffffff;
+  --text-color: #1c232b;
+  --text-color-alt: #1c232b;
+  --highlight-color: #ffffff;
+  --border-color: rgba(28, 35, 43, 0.12);
+  --default-border-color: rgba(28, 35, 43, 0.12);
+  --font-family: var(--font-open-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --heading-font-family: var(--font-open-sans), -apple-system, sans-serif;
+  --heading-font-weight: 700;
+  --button-primary-background: #1c232b;
+  --button-primary-color: #ffffff;
+  --button-primary-background-alt: #000000;
+  --button-primary-color-alt: #ffffff;
+
+  padding: 0;
+  background: #ffffff;
+  color: #1c232b;
+  font-family: var(--font-open-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .widget_header {
+    padding: 2rem 3rem 1.25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-color, #222) 8%, transparent);
+    text-align: center;
+    position: relative;
+    background: var(--background-color, #fff);
+
+    h1.buy-tickets-label {
+      font-size: 1.5rem;
+      line-height: 1.3;
+      font-weight: var(--heading-font-weight, 700);
+      font-family: var(--heading-font-family, inherit);
+      margin: 0;
+      color: var(--text-color, #1c232b);
+    }
+    .subtitle {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: color-mix(in srgb, var(--text-color, #222) 72%, transparent);
+      .venue_name, .date_and_time { display: block; line-height: 1.5; }
+      .date_and_time { font-weight: 600; color: var(--text-color, #1c232b); }
+    }
+    .back_arrow {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.25rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 100px;
+      background: color-mix(in srgb, var(--text-color, #222) 5%, transparent);
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--text-color, #1c232b);
+      &:hover { background: color-mix(in srgb, var(--text-color, #222) 10%, transparent); }
+    }
+  }
+
+  .checkout_main_content {
+    padding: 1.5rem;
+  }
+}
+
+// Real-product date list — 80px rows with circular CTA on the right
+.checkout-pane .select_date_wrapper {
+  text-align: left;
+
+  .select_date {
+    border-top: 1px solid color-mix(in srgb, var(--text-color, #222) 8%, transparent);
+  }
+
+  .date {
+    .occurrence.date_select {
+      border-bottom: 1px solid color-mix(in srgb, var(--text-color, #222) 8%, transparent);
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
+      a, > button {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin: 0;
+        text-decoration: none;
+        font-weight: normal;
+        width: 100%;
+        text-align: left;
+        padding: 1rem 1.25rem;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: inherit;
+        color: var(--text-color, #1c232b);
+        cursor: pointer;
+        position: relative;
+        min-height: 80px;
+        box-sizing: border-box;
+
+        &:hover {
+          background: color-mix(in srgb, var(--text-color, #222) 3%, transparent);
+        }
+
+        .date_time_details {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          min-width: 0;
+        }
+
+        .date_portion {
+          font-weight: 600;
+          font-size: 1rem;
+          color: var(--text-color, #1c232b);
+        }
+        .time_portion {
+          font-size: 0.875rem;
+          color: color-mix(in srgb, var(--text-color, #222) 60%, transparent);
+        }
+
+        .button {
+          flex: 0 0 36px;
+          width: 36px;
+          min-width: 36px;
+          max-width: 36px;
+          height: 36px;
+          aspect-ratio: 1 / 1;
+          border-radius: 50%;
+          padding: 0;
+          background: var(--button-primary-background, #1c232b);
+          color: var(--button-primary-color, #fff);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          order: 99;
+          margin-left: auto;
+          position: relative;
+          box-sizing: border-box;
+          transition: box-shadow 0.2s;
+
+          &:after {
+            content: '→';
+            font-size: 1rem;
+            font-weight: bold;
+          }
+        }
+
+        &:hover .button {
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--button-primary-background, #1c232b) 25%, transparent);
+        }
+      }
+    }
+
+    &.selected .occurrence.date_select {
+      background: color-mix(in srgb, var(--button-primary-background, #1c232b) 5%, transparent);
+    }
+
+    .occurrence.date_select.more_dates_available {
+      min-height: 0;
+      display: block;
+      border-bottom: none;
+      p {
+        margin: 0;
+        padding: 1.25rem 1.25rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: rgba(28, 35, 43, 0.6);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Time slot grid (when a date has multiple times)
+.checkout-pane .occurrences.time_select {
+  width: 100%;
+  padding: 0 1.25rem 1rem;
+
+  .time_select_wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+
+    .occurrence {
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        text-align: center;
+        padding: 0.6rem 0.4rem;
+        border: 1px solid color-mix(in srgb, var(--text-color, #222) 12%, transparent);
+        border-radius: 6px;
+        color: var(--text-color, #1c232b);
+        font-size: 0.875rem;
+        font-weight: 600;
+        position: relative;
+        transition: border-color 0.15s, background 0.15s;
+
+        &:after {
+          content: '';
+          position: absolute;
+          left: 4px;
+          right: 4px;
+          bottom: 3px;
+          height: 3px;
+          border-radius: 4px;
+          background: var(--button-primary-background, #1c232b);
+          opacity: 0.6;
+        }
+        &:hover { border-color: var(--button-primary-background, #1c232b); }
+
+        .button { display: none; }
+        .date_string > var { font-style: normal; font-weight: 600; }
+      }
+
+      &.active a {
+        border-color: var(--button-primary-background, #1c232b);
+        background: color-mix(in srgb, var(--button-primary-background, #1c232b) 8%, transparent);
+        &:after { opacity: 1; }
+      }
+    }
+  }
+}
+
+// Tickets — match product ticket_row layout
+.checkout-pane .ticket_row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color, #222) 8%, transparent);
+
+  &:last-of-type { border-bottom: none; }
+
+  &--unavailable .ticket_name { opacity: 0.55; }
+
+  .ticket_name {
+    label, > div {
+      display: flex; flex-direction: column; gap: 0.2rem;
+      cursor: pointer;
+      var.ticket_label {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text-color, #1c232b);
+      }
+    }
+  }
+  .price var {
+    font-style: normal;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--text-color, #222) 70%, transparent);
+    font-size: 0.95rem;
+  }
+  .quantity {
+    .quantity-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      button {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        border: 1px solid color-mix(in srgb, var(--text-color, #222) 12%, transparent);
+        background: transparent;
+        color: var(--text-color, #1c232b);
+        font-size: 1.1rem;
+        font-family: inherit;
+        cursor: pointer;
+        line-height: 1;
+        &:hover:not(:disabled) { border-color: var(--text-color, #1c232b); }
+        &:disabled { opacity: 0.4; cursor: not-allowed; }
+      }
+      span { min-width: 1.5rem; text-align: center; font-weight: 600; }
+    }
+    .status_warning {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #c00;
+    }
+  }
+
+  &.submit {
+    grid-template-columns: 1fr auto;
+    margin-top: 0.5rem;
+    padding-top: 1.5rem;
+    border-top: none;
+    border-bottom: none;
+    .subtotal {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      .subtotal_label {
+        font-size: 0.85rem;
+        color: color-mix(in srgb, var(--text-color, #222) 65%, transparent);
+      }
+      .subtotal_amount { font-weight: 700; font-size: 1.4rem; }
+    }
+    .button.btn {
+      padding: 0.95rem 1.5rem;
+    }
+  }
+}
+
+// Captcha holder under the form
+.tt-captcha {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+// Fixed bottom CTA bar — sits on top of everything including the checkout overlay
+.tt-sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: $white;
+  border-top: 1px solid rgba($navy, 0.1);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow: 0 -16px 48px -8px rgba($navy, 0.18), 0 -4px 12px rgba($navy, 0.08);
+
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+
+  &--visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &__label {
+    font-size: 0.95rem;
+    color: rgba($navy, 0.78);
+    @media (max-width: 600px) { display: none; }
+  }
+}
+
+// Footer
+.tt-footer {
+  background: $navy;
+  color: rgba($white, 0.85);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+
+  a { color: $white; font-weight: 600; }
+}
+
