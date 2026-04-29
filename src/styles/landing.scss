@@ -312,6 +312,14 @@ $white: #FFFFFF;
     align-items: center;
     gap: 0.4rem;
   }
+  &__trigger-prefix {
+    font-weight: 700;
+    color: rgba($navy, 0.55);
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    margin-right: 0.15rem;
+  }
 
   &__panel {
     position: absolute;

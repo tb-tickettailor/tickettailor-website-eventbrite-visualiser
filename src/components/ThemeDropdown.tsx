@@ -42,6 +42,7 @@ export function ThemeDropdown({ theme, setTheme }: Props) {
         aria-expanded={open}
       >
         <span className="tt-theme-dropdown__trigger-label">
+          <span className="tt-theme-dropdown__trigger-prefix">Theme</span>
           <span
             className={`tt-theme-pill__dot${current.accent === 'split-bw' ? ' tt-theme-pill__dot--split' : ''}`}
             style={current.accent === 'split-bw' ? undefined : { background: current.accent }}
