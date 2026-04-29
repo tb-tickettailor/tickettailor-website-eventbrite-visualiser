@@ -8,7 +8,12 @@ type Props = {
 };
 
 export function EventPreview({ preview, onBuyClick, headerVariation }: Props) {
-  const dateLabel = formatEventDate(preview.startDate, preview.endDate);
+  // For series, the JSON-LD start/end describes the whole envelope (e.g. Jan
+  // → May). Prefer the first concrete occurrence so the hero shows a real
+  // single-event window. Falls back to the series-level dates otherwise.
+  const heroStart = preview.occurrences[0]?.start ?? preview.startDate;
+  const heroEnd = preview.occurrences[0]?.end ?? preview.endDate;
+  const dateLabel = formatEventDate(heroStart, heroEnd);
   const locationLabel = preview.isOnline
     ? 'Online event'
     : preview.venueLocation ?? preview.venueName ?? '';
