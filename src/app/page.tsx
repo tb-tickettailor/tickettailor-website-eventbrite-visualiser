@@ -45,10 +45,15 @@ export default function Home() {
 
   useEffect(() => {
     if (!hasUserPreview) return;
-    const el = previewRef.current;
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 16;
-    window.scrollTo({ top, behavior: 'smooth' });
+    // Wait for the savings callout (if it's going to render) and the
+    // preview to mount before measuring scroll position.
+    requestAnimationFrame(() => {
+      const callout = document.querySelector('.tt-savings');
+      const el = callout ?? previewRef.current;
+      if (!el) return;
+      const top = (el as HTMLElement).getBoundingClientRect().top + window.scrollY - 24;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   }, [hasUserPreview]);
   const [theme, setTheme] = useState<ThemeId>(DEFAULT_THEME);
   const [showCaptcha, setShowCaptcha] = useState(false);
@@ -220,13 +225,12 @@ function SavingsCallout({ preview }: { preview: EventbritePreview }) {
       <i className="fa-solid fa-tag" aria-hidden="true" />
       <div className="tt-savings__body">
         <div className="tt-savings__headline">
-          You'd save around {symbol}
-          {savings.perTicket.toFixed(2)} per ticket on Ticket Tailor
+          {savings.percentOfPrice}% less in fees on Ticket Tailor
         </div>
         <div className="tt-savings__detail">
           {symbol}
-          {savings.eventbriteFee.toFixed(2)} Eventbrite fees vs {symbol}
-          {savings.ticketTailorFee.toFixed(2)} on Ticket Tailor.{' '}
+          {savings.eventbriteFee.toFixed(2)} Eventbrite vs {symbol}
+          {savings.ticketTailorFee.toFixed(2)} Ticket Tailor per ticket.{' '}
           <a href="https://www.tickettailor.com/pricing" target="_blank" rel="noopener noreferrer">
             Save even more with credits →
           </a>

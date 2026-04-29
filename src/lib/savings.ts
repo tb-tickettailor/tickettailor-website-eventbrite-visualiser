@@ -18,8 +18,11 @@ const EB_PAYMENT_PCT = 0.029;
 const TT_SERVICE_FIXED = 0.6;
 const TT_PAYMENT_PCT = 0.02;
 
+const MIN_SAVING_PCT_OF_PRICE = 0.05;
+
 export type SavingsBreakdown = {
   perTicket: number;
+  percentOfPrice: number; // saving as a % of the ticket price
   ticketPrice: number;
   eventbriteFee: number;
   ticketTailorFee: number;
@@ -35,11 +38,13 @@ export function computeSavings(event: EventbritePreview): SavingsBreakdown | nul
   const ebFee = price * EB_SERVICE_PCT + EB_SERVICE_FIXED + price * EB_PAYMENT_PCT;
   const ttFee = TT_SERVICE_FIXED + price * TT_PAYMENT_PCT;
   const saving = ebFee - ttFee;
+  const pctOfPrice = saving / price;
 
-  if (saving <= 0) return null;
+  if (pctOfPrice < MIN_SAVING_PCT_OF_PRICE) return null;
 
   return {
     perTicket: round2(saving),
+    percentOfPrice: Math.round(pctOfPrice * 100),
     ticketPrice: price,
     eventbriteFee: round2(ebFee),
     ticketTailorFee: round2(ttFee),
