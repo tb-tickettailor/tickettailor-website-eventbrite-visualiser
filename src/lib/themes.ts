@@ -66,7 +66,7 @@ export const THEMES: ThemeMeta[] = [
     label: 'Vivid',
     headerVariation: 'full-bleed',
     accent: '#ff527e',
-    sampleImage: UNSPLASH('photo-1574391884720-bbc049ec09ad')
+    sampleImage: UNSPLASH('photo-1493676304819-0d7a8d026dcf')
   }
 ];
 
