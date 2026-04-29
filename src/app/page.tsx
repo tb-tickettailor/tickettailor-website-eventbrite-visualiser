@@ -225,7 +225,7 @@ function SavingsCallout({ preview }: { preview: EventbritePreview }) {
       <i className="fa-solid fa-tag" aria-hidden="true" />
       <div className="tt-savings__body">
         <div className="tt-savings__headline">
-          {savings.percentOfPrice}% less in fees on Ticket Tailor
+          {savings.percentLessFees}% less in fees on Ticket Tailor
         </div>
         <div className="tt-savings__detail">
           {symbol}
