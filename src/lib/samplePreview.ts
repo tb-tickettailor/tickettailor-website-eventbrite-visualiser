@@ -10,8 +10,8 @@ export const SAMPLE_PREVIEW: EventbritePreview = {
   startDate: nextSaturdayAt(19, 0).toISOString(),
   endDate: nextSaturdayAt(22, 0).toISOString(),
   timezone: null,
-  venueName: 'The Sample Venue',
-  venueLocation: '123 Example Street, London, EC1A 1AA, United Kingdom',
+  venueName: 'Ticket Tailor HQ',
+  venueLocation: 'WeWork, 167-169 Great Portland Street, London, W1W 5PF, United Kingdom',
   isOnline: false,
   imageUrl:
     'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=80&auto=format&fit=crop',
