@@ -354,21 +354,29 @@ function PreviewSection({
             ))}
           </div>
           <div className="tt-theme-dropdown-wrap">
-            <ThemeDropdown theme={theme} setTheme={setTheme} />
+            <ThemeDropdown
+              theme={theme}
+              setTheme={setTheme}
+              autoColorEnabled={hasUserPreview}
+              autoColor={useEventColours}
+              setAutoColor={setUseEventColours}
+            />
           </div>
-          <button
-            type="button"
-            className={`tt-event-colours-toggle${useEventColours ? ' tt-event-colours-toggle--on' : ''}`}
-            onClick={() => setUseEventColours((v) => !v)}
-            aria-pressed={useEventColours}
-            title="Sample colours from the event image"
-          >
-            <i className="fa-solid fa-palette" aria-hidden="true" />
-            <span>Auto color</span>
-            <span className="tt-event-colours-toggle__switch" aria-hidden="true">
-              <span className="tt-event-colours-toggle__thumb" />
-            </span>
-          </button>
+          {hasUserPreview ? (
+            <button
+              type="button"
+              className={`tt-event-colours-toggle${useEventColours ? ' tt-event-colours-toggle--on' : ''}`}
+              onClick={() => setUseEventColours((v) => !v)}
+              aria-pressed={useEventColours}
+              title="Sample colours from the event image"
+            >
+              <i className="fa-solid fa-palette" aria-hidden="true" />
+              <span>Auto color</span>
+              <span className="tt-event-colours-toggle__switch" aria-hidden="true">
+                <span className="tt-event-colours-toggle__thumb" />
+              </span>
+            </button>
+          ) : null}
           </nav>
 
           <div className="tt-preview-frame" style={frameStyle}>

@@ -6,9 +6,18 @@ import { THEMES, type ThemeId } from '@/lib/themes';
 type Props = {
   theme: ThemeId;
   setTheme: (t: ThemeId) => void;
+  autoColorEnabled?: boolean;
+  autoColor?: boolean;
+  setAutoColor?: (v: boolean) => void;
 };
 
-export function ThemeDropdown({ theme, setTheme }: Props) {
+export function ThemeDropdown({
+  theme,
+  setTheme,
+  autoColorEnabled = false,
+  autoColor = false,
+  setAutoColor
+}: Props) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -77,6 +86,20 @@ export function ThemeDropdown({ theme, setTheme }: Props) {
               </button>
             ))}
           </div>
+          {autoColorEnabled && setAutoColor ? (
+            <button
+              type="button"
+              className={`tt-theme-dropdown__auto${autoColor ? ' tt-theme-dropdown__auto--on' : ''}`}
+              onClick={() => setAutoColor(!autoColor)}
+              aria-pressed={autoColor}
+            >
+              <i className="fa-solid fa-palette" aria-hidden="true" />
+              <span>Auto color</span>
+              <span className="tt-event-colours-toggle__switch" aria-hidden="true">
+                <span className="tt-event-colours-toggle__thumb" />
+              </span>
+            </button>
+          ) : null}
         </div>
       ) : null}
     </div>

@@ -36,6 +36,10 @@ $white: #FFFFFF;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+
+    @media (max-width: 600px) {
+      padding: 0 0.75rem;
+    }
   }
 
   &__logo svg { display: block; height: 38px; width: auto; }
@@ -92,6 +96,10 @@ $white: #FFFFFF;
   padding: 4rem 1.5rem 5rem;
   text-align: center;
   position: relative;
+
+  @media (max-width: 600px) {
+    padding: 3rem 0.75rem 3.5rem;
+  }
 
   &__inner {
     max-width: 820px;
@@ -185,9 +193,15 @@ $white: #FFFFFF;
 
 // Preview section
 .tt-preview-section {
-  padding: 3rem 1.5rem 4rem;
+  padding: 0 1.5rem 4rem;
   background: $light-gray;
   flex: 1;
+
+  @media (max-width: 600px) {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 2rem;
+  }
 }
 
 
@@ -200,9 +214,15 @@ $white: #FFFFFF;
 // Toggle: use sampled image colours instead of theme defaults
 .tt-event-colours-toggle {
   display: inline-flex;
+
+  // Below the desktop breakpoint the toggle moves inside the theme dropdown
+  // panel, so hide the standalone version in the tab row.
+  @media (max-width: 1099px) {
+    display: none;
+  }
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0.55rem 0.4rem 0.75rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.75rem;
   background: $white;
   border: 1px solid rgba($navy, 0.12);
   border-radius: 100vw;
@@ -421,6 +441,42 @@ $white: #FFFFFF;
       justify-content: flex-start;
     }
   }
+
+  &__auto {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.6rem 0.5rem 0.7rem;
+    background: $white;
+    border: 1px solid rgba($navy, 0.12);
+    border-radius: 100vw;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $navy;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+
+    i { font-size: 0.85rem; color: rgba($navy, 0.6); }
+
+    span:not(.tt-event-colours-toggle__switch):not(.tt-event-colours-toggle__thumb) {
+      flex: 1;
+      text-align: left;
+    }
+
+    &:hover { border-color: rgba($navy, 0.4); }
+
+    &--on {
+      background: rgba($peach, 0.4);
+      border-color: $orange;
+      i { color: $orange; }
+
+      .tt-event-colours-toggle__switch { background: $orange; }
+      .tt-event-colours-toggle__thumb { left: 14px; }
+    }
+  }
 }
 
 @keyframes tt-dropdown-in {
@@ -480,13 +536,18 @@ $white: #FFFFFF;
   position: relative;
   z-index: 100000;
 
+  @media (max-width: 600px) {
+    flex-wrap: nowrap;
+    padding-left: 0;
+  }
+
   .tt-preview-tab {
     flex: 0 0 auto;
     background: rgba($navy, 0.05);
     border: 1px solid transparent;
     border-bottom: none;
     border-radius: 10px 10px 0 0;
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 1rem 1rem;
     font-family: inherit;
     font-size: 0.85rem;
     font-weight: 600;
@@ -526,6 +587,10 @@ $white: #FFFFFF;
   box-shadow: 0 24px 64px -16px rgba($navy, 0.25), 0 6px 16px rgba($navy, 0.08);
   min-height: 400px;
   position: relative;
+
+  @media (max-width: 600px) {
+    border-top-left-radius: 0;
+  }
 
   .header__logo {
     max-width: 375px;
