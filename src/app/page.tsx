@@ -301,7 +301,7 @@ function PreviewSection({
                     onClick={() => setTab('page')}
                     aria-label="Close"
                   >
-                    ×
+                    <i className="fa-solid fa-xmark" aria-hidden="true" />
                   </button>
                   {tab === 'date' ? (
                     <SelectDateView

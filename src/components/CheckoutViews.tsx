@@ -196,9 +196,8 @@ export function SelectTicketsView({
             onClick={onBack}
             title="Back"
             aria-label="Back to dates"
-          >
-            ←
-          </button>
+          />
+
         ) : null}
         <h1 id="dialog_header" className="buy-tickets-label">
           {event.name}
@@ -213,7 +212,7 @@ export function SelectTicketsView({
 
       <main className="checkout_main_content">
         <div className="event_product_form event_ticket_form form--controls-increment-quantity">
-          <div className="zend_form">
+          <div className="ticket_group">
             {tickets.map((ticket) => (
               <div
                 className={`ticket_row ga_ticket_row ticket_type${ticket.available ? '' : ' ticket_row--unavailable'}`}
@@ -253,23 +252,23 @@ export function SelectTicketsView({
                 </span>
               </div>
             ))}
+          </div>
 
-            <div className="ticket_row submit">
-              <span className="subtotal">
-                <span className="subtotal_label">
-                  {totalCount} ticket{totalCount === 1 ? '' : 's'}
-                </span>
-                <span className="subtotal_amount">{currencySymbol}{subtotal.toFixed(2)}</span>
+          <div className="ticket_row submit">
+            <span className="subtotal">
+              <span className="subtotal_label">
+                {totalCount} ticket{totalCount === 1 ? '' : 's'}
               </span>
-              <a
-                className="button button--primary button--size-large btn"
-                href={SIGN_UP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Sign up to publish on Ticket Tailor
-              </a>
-            </div>
+              <span className="subtotal_amount">{currencySymbol}{subtotal.toFixed(2)}</span>
+            </span>
+            <a
+              className="button button--primary button--size-large btn"
+              href={SIGN_UP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Sign up to publish on Ticket Tailor
+            </a>
           </div>
         </div>
       </main>

@@ -117,23 +117,37 @@ $white: #FFFFFF;
 
 .tt-form {
   display: flex;
-  gap: 0.5rem;
-  max-width: 600px;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 640px;
   margin: 0 auto;
-  flex-wrap: wrap;
+  background: $white;
+  border: 1px solid $navy-soft;
+  border-radius: 100vw;
+  padding: 0.4rem 0.4rem 0.4rem 1.4rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: $navy;
+    box-shadow: 0 0 0 3px rgba($navy, 0.08);
+  }
 
   input[type="url"] {
     flex: 1;
-    min-width: 240px;
-    padding: 0.95rem 1.2rem;
+    min-width: 0;
+    padding: 0.55rem 0;
     font-size: 1rem;
-    border: 1px solid $navy-soft;
-    border-radius: 100vw;
-    background: $white;
+    border: none;
+    background: transparent;
     font-family: inherit;
     color: $navy;
-    &:focus { outline: none; border-color: $navy; }
+    &:focus { outline: none; }
     &::placeholder { color: rgba($navy, 0.45); }
+  }
+
+  // The submit button sits inside the field on the right
+  > .tt-button {
+    flex: 0 0 auto;
   }
 }
 
@@ -239,11 +253,28 @@ $white: #FFFFFF;
 .tt-theme-dropdown-wrap {
   margin-left: auto;
   display: flex;
+  align-items: center;
 
   @media (min-width: 1100px) {
     display: none;
   }
+
+  // Below ~600px the tabs row gets cramped — pull the dropdown above the tabs
+  // and span full width so the layout breathes.
+  @media (max-width: 600px) {
+    order: -1;
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+
+    .tt-theme-dropdown,
+    .tt-theme-dropdown__trigger {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
 }
+
 
 // Theme dropdown — sits on the right side of the tabs
 .tt-theme-dropdown {
@@ -253,16 +284,18 @@ $white: #FFFFFF;
   &__trigger {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.65rem 1rem;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem 0.4rem 0.55rem;
     background: $white;
     border: 1px solid rgba($navy, 0.12);
     border-radius: 100vw;
     color: $navy;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     transition: border-color 0.15s, box-shadow 0.15s;
+
+    strong { font-weight: 600; }
 
     &:hover { border-color: $navy; }
     &[aria-expanded="true"] {
@@ -270,50 +303,38 @@ $white: #FFFFFF;
       box-shadow: 0 0 0 3px rgba($navy, 0.1);
     }
 
-    i { font-size: 0.75rem; transition: transform 0.15s; }
+    i { font-size: 0.7rem; transition: transform 0.15s; }
     &[aria-expanded="true"] i { transform: rotate(180deg); }
   }
 
   &__trigger-label {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-  }
-  &__trigger-prefix {
-    font-weight: 500;
-    color: rgba($navy, 0.55);
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
+    gap: 0.4rem;
   }
 
   &__panel {
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 0;
-    width: 460px;
-    max-width: calc(100vw - 2rem);
     background: $white;
     border-radius: 14px;
-    padding: 0.9rem;
+    padding: 0.75rem;
     z-index: 100001;
     box-shadow: 0 24px 60px -12px rgba($navy, 0.28), 0 6px 16px rgba($navy, 0.1);
     border: 1px solid rgba($navy, 0.06);
     animation: tt-dropdown-in 0.15s ease;
+    min-width: 180px;
   }
 
-  &__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
+  &__pills {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 
-    li {
-      border: 1px solid #eee;
-      border-radius: 10px;
-      overflow: hidden;
+    .tt-theme-pill {
+      width: 100%;
+      justify-content: flex-start;
     }
   }
 }
@@ -369,8 +390,9 @@ $white: #FFFFFF;
 .tt-preview-tabs {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 0.25rem;
-  padding: 0 0.5rem;
+  padding: 0 0 0 0.5rem;
   position: relative;
   z-index: 100000;
 
@@ -405,7 +427,7 @@ $white: #FFFFFF;
       border-color: rgba($navy, 0.08);
       position: relative;
       z-index: 1;
-      box-shadow: 0 -8px 20px -4px rgba($navy, 0.12);
+      box-shadow: 0 -2px 6px -2px rgba($navy, 0.08);
     }
   }
 
@@ -586,17 +608,21 @@ $white: #FFFFFF;
     position: absolute;
     top: 1rem;
     right: 1rem;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    border: none;
-    background: rgba(28, 35, 43, 0.06);
+    border: 1px solid rgba(28, 35, 43, 0.12);
+    background: transparent;
     color: #1c232b;
-    font-size: 1.4rem;
+    font-size: 0.85rem;
     line-height: 1;
     cursor: pointer;
     z-index: 2;
-    &:hover { background: rgba(28, 35, 43, 0.12); }
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    &:hover { border-color: #1c232b; }
   }
 }
 
@@ -659,17 +685,28 @@ $white: #FFFFFF;
     }
     .back_arrow {
       position: absolute;
-      top: 1.5rem;
-      left: 1.25rem;
-      width: 40px;
-      height: 40px;
-      border-radius: 100px;
-      background: color-mix(in srgb, var(--text-color, #222) 5%, transparent);
-      border: none;
+      top: 1.25rem;
+      left: 1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid color-mix(in srgb, var(--text-color, #222) 12%, transparent);
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       color: var(--text-color, #1c232b);
-      &:hover { background: color-mix(in srgb, var(--text-color, #222) 10%, transparent); }
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      &:hover { border-color: var(--text-color, #1c232b); }
+      &:after {
+        content: '\f060';
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-style: normal;
+      }
     }
   }
 
@@ -683,7 +720,12 @@ $white: #FFFFFF;
   text-align: left;
 
   .select_date {
-    border-top: 1px solid color-mix(in srgb, var(--text-color, #222) 8%, transparent);
+    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--text-color, #222) 12%, transparent);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px -8px rgba(28, 35, 43, 0.18), 0 2px 6px rgba(28, 35, 43, 0.06);
+    overflow: hidden;
+    margin: 0 0 1rem;
   }
 
   .date {
@@ -846,7 +888,17 @@ $white: #FFFFFF;
   }
 }
 
-// Tickets — match product ticket_row layout
+// Tickets — match product ticket_row layout. Wrap rows in a card; submit
+// row sits below the card.
+.checkout-pane .event_ticket_form .ticket_group {
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--text-color, #222) 12%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(28, 35, 43, 0.04);
+  padding: 0 1.1rem;
+  margin-bottom: 1rem;
+}
+
 .checkout-pane .ticket_row {
   display: grid;
   grid-template-columns: 1fr auto auto;
@@ -865,7 +917,7 @@ $white: #FFFFFF;
       cursor: pointer;
       var.ticket_label {
         font-style: normal;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 1rem;
         color: var(--text-color, #1c232b);
       }
@@ -875,7 +927,7 @@ $white: #FFFFFF;
     font-style: normal;
     font-weight: 500;
     color: color-mix(in srgb, var(--text-color, #222) 70%, transparent);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
   .quantity {
     .quantity-control {
@@ -908,8 +960,9 @@ $white: #FFFFFF;
 
   &.submit {
     grid-template-columns: 1fr auto;
-    margin-top: 0.5rem;
-    padding-top: 1.5rem;
+    margin-top: 0;
+    padding-top: 1rem;
+    padding-bottom: 0;
     border-top: none;
     border-bottom: none;
     .subtotal {
@@ -917,13 +970,23 @@ $white: #FFFFFF;
       flex-direction: column;
       gap: 0.1rem;
       .subtotal_label {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: color-mix(in srgb, var(--text-color, #222) 65%, transparent);
       }
-      .subtotal_amount { font-weight: 700; font-size: 1.4rem; }
+      .subtotal_amount { font-weight: 700; font-size: 1.2rem; }
     }
-    .button.btn {
-      padding: 0.95rem 1.5rem;
+    // Match the v2 checkout primary blue button regardless of theme tokens.
+    .button.btn,
+    a.button.button--primary.btn {
+      padding: 0.85rem 1.4rem !important;
+      background: #0073e6 !important;
+      border-color: #0073e6 !important;
+      color: #fff !important;
+      font-size: 0.9rem !important;
+      &:hover {
+        background: #005bb5 !important;
+        border-color: #005bb5 !important;
+      }
     }
   }
 }

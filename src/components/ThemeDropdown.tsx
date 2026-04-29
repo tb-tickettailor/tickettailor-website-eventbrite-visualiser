@@ -42,7 +42,11 @@ export function ThemeDropdown({ theme, setTheme }: Props) {
         aria-expanded={open}
       >
         <span className="tt-theme-dropdown__trigger-label">
-          <span className="tt-theme-dropdown__trigger-prefix">Theme</span>
+          <span
+            className={`tt-theme-pill__dot${current.accent === 'split-bw' ? ' tt-theme-pill__dot--split' : ''}`}
+            style={current.accent === 'split-bw' ? undefined : { background: current.accent }}
+            aria-hidden="true"
+          />
           <strong>{current.label}</strong>
         </span>
         <i className="fa-solid fa-chevron-down" aria-hidden="true" />
@@ -50,31 +54,28 @@ export function ThemeDropdown({ theme, setTheme }: Props) {
 
       {open ? (
         <div className="tt-theme-dropdown__panel" role="listbox">
-          <ul className="tt-theme-dropdown__list">
+          <div className="tt-theme-dropdown__pills">
             {THEMES.map((t) => (
-              <li key={t.id}>
-                <button
-                  type="button"
-                  className={`tt-theme-card${theme === t.id ? ' tt-theme-card--active' : ''}`}
-                  onClick={() => {
-                    setTheme(t.id);
-                    setOpen(false);
-                  }}
-                  aria-pressed={theme === t.id}
-                  role="option"
-                  aria-selected={theme === t.id}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/themes/thumbnails/${t.id}.png`}
-                    alt=""
-                    className="tt-theme-card__thumb"
-                  />
-                  <span className="tt-theme-card__label">{t.label}</span>
-                </button>
-              </li>
+              <button
+                key={t.id}
+                type="button"
+                role="option"
+                aria-selected={theme === t.id}
+                className={`tt-theme-pill${theme === t.id ? ' tt-theme-pill--active' : ''}`}
+                onClick={() => {
+                  setTheme(t.id);
+                  setOpen(false);
+                }}
+              >
+                <span
+                  className={`tt-theme-pill__dot${t.accent === 'split-bw' ? ' tt-theme-pill__dot--split' : ''}`}
+                  style={t.accent === 'split-bw' ? undefined : { background: t.accent }}
+                  aria-hidden="true"
+                />
+                {t.label}
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
       ) : null}
     </div>
