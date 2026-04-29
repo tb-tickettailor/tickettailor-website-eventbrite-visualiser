@@ -267,7 +267,7 @@ export function SelectTicketsView({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Sign up to publish on Ticket Tailor
+              Import event
             </a>
           </div>
         </div>

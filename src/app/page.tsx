@@ -28,6 +28,7 @@ import {
 import Logo from '@/components/Logo';
 import { ThemeDropdown } from '@/components/ThemeDropdown';
 import { SAMPLE_PREVIEW } from '@/lib/samplePreview';
+import { computeSavings } from '@/lib/savings';
 
 const SIGN_UP_URL = 'https://app.tickettailor.com/sign-up';
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
@@ -128,9 +129,9 @@ export default function Home() {
             <Logo />
           </a>
           <nav className="tt-header__nav" aria-label="Primary">
-            <a href="https://www.tickettailor.com/features/">Features</a>
-            <a href="https://www.tickettailor.com/pricing/">Pricing</a>
-            <a href="https://www.tickettailor.com/about/">About</a>
+            <a href="https://www.tickettailor.com/eventbrite-alternative">
+              Compare with Eventbrite
+            </a>
           </nav>
           <a className="tt-button tt-button--navy" href={SIGN_UP_URL} target="_blank" rel="noopener noreferrer">
             Sign up free
@@ -185,6 +186,7 @@ export default function Home() {
               />
             </div>
           ) : null}
+          {hasUserPreview && preview ? <SavingsCallout preview={preview} /> : null}
         </div>
       </section>
 
@@ -202,6 +204,33 @@ export default function Home() {
       <footer className="tt-footer">
         Standalone preview · powered by <a href="https://www.tickettailor.com">Ticket Tailor</a>
       </footer>
+    </div>
+  );
+}
+
+function SavingsCallout({ preview }: { preview: EventbritePreview }) {
+  const savings = computeSavings(preview);
+  if (!savings) return null;
+
+  const symbol = savings.currency === 'GBP' ? '£' : '$';
+
+  return (
+    <div className="tt-savings" role="status">
+      <i className="fa-solid fa-tag" aria-hidden="true" />
+      <div className="tt-savings__body">
+        <div className="tt-savings__headline">
+          You'd save around {symbol}
+          {savings.perTicket.toFixed(2)} per ticket on Ticket Tailor
+        </div>
+        <div className="tt-savings__detail">
+          {symbol}
+          {savings.eventbriteFee.toFixed(2)} Eventbrite fees vs {symbol}
+          {savings.ticketTailorFee.toFixed(2)} on Ticket Tailor.{' '}
+          <a href="https://www.tickettailor.com/pricing" target="_blank" rel="noopener noreferrer">
+            Save even more with credits →
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
@@ -426,7 +455,7 @@ function PreviewSection({
       </section>
       <div className={`tt-sticky-cta${hasUserPreview ? ' tt-sticky-cta--visible' : ''}`}>
         <span className="tt-sticky-cta__label">
-          Like what you see? Get your event live in minutes.
+          Like what you see? Bring your event over in minutes.
         </span>
         <a
           className="tt-button tt-button--peach"
@@ -434,7 +463,7 @@ function PreviewSection({
           target="_blank"
           rel="noopener noreferrer"
         >
-          Publish on Ticket Tailor
+          Import event
         </a>
       </div>
     </>
