@@ -252,6 +252,7 @@ function PreviewSection({
             <i className="fa-solid fa-ticket" aria-hidden="true" /> Tickets
           </button>
           <div className="tt-theme-pills" role="radiogroup" aria-label="Choose a theme">
+            <span className="tt-theme-pills__label">Theme</span>
             {THEMES.map((t) => (
               <button
                 key={t.id}
