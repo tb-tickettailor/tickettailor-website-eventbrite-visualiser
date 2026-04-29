@@ -215,11 +215,26 @@ $white: #FFFFFF;
     margin-top: 0.25rem;
     font-size: 0.85rem;
     color: rgba($navy, 0.7);
-    a {
-      color: $navy;
-      font-weight: 600;
-      text-decoration: underline;
-      &:hover { color: $orange; }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.4rem;
+    color: $navy;
+    font-weight: 600;
+    text-decoration: none;
+    &:hover { color: $orange; }
+
+    i {
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      display: flex;
+      margin-left: 0;
+      margin-top: 0.4rem;
     }
   }
 }

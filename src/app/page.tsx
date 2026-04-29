@@ -230,9 +230,15 @@ function SavingsCallout({ preview }: { preview: EventbritePreview }) {
         <div className="tt-savings__detail">
           {symbol}
           {savings.eventbriteFee.toFixed(2)} Eventbrite vs {symbol}
-          {savings.ticketTailorFee.toFixed(2)} Ticket Tailor per ticket.{' '}
-          <a href="https://www.tickettailor.com/pricing" target="_blank" rel="noopener noreferrer">
-            Save even more with credits →
+          {savings.ticketTailorFee.toFixed(2)} Ticket Tailor per ticket.
+          <a
+            className="tt-savings__link"
+            href="https://www.tickettailor.com/pricing"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Save even more with credits
+            <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
           </a>
         </div>
       </div>
