@@ -484,6 +484,20 @@ $white: #FFFFFF;
       object-fit: cover;
       display: block;
     }
+
+    // Dim the image so the centred title overlay stays readable.
+    .hero__slide-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.25) 0%,
+        rgba(0, 0, 0, 0.45) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
   }
 
   .hero[data-variation="full-bleed"] .hero__wrapper,
