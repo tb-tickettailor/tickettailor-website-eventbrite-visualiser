@@ -114,6 +114,15 @@ export function EventPreview({ preview, onBuyClick, headerVariation }: Props) {
             <section className="detail-content__location">
               <h3>Location</h3>
               <p>{preview.venueLocation}</p>
+              <iframe
+                title={`Map of ${preview.venueLocation}`}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(preview.venueLocation)}&output=embed`}
+                width="100%"
+                height="320"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{ border: 0, borderRadius: 8, marginTop: '1rem' }}
+              />
             </section>
           ) : null}
         </div>
