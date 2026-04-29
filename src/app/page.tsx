@@ -7,6 +7,7 @@ import {
   DEFAULT_THEME,
   THEMES,
   headerVariationFor,
+  sampleImageFor,
   themeStylesheetUrl,
   type ThemeId
 } from '@/lib/themes';
@@ -279,7 +280,11 @@ function PreviewSection({
 
           <div className="tt-preview-frame">
             <EventPreview
-              preview={preview}
+              preview={
+                hasUserPreview
+                  ? preview
+                  : { ...preview, imageUrl: sampleImageFor(theme) }
+              }
               onBuyClick={handleBuyClick}
               headerVariation={headerVariationFor(theme)}
             />

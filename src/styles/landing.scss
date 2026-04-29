@@ -423,6 +423,30 @@ $white: #FFFFFF;
     max-width: 375px;
   }
 
+  // The product's .hero rule applies --background-color-alt directly to the
+  // hero element and uses .hero:after { width: 100vw } to break out of page
+  // gutters. Inside our preview-frame (overflow: hidden) the 100vw trick gets
+  // clipped, so we redirect the background colour onto a full-bleed :after
+  // pseudo positioned behind everything within the frame.
+  .hero {
+    background: transparent !important;
+    isolation: isolate;
+
+    &:after {
+      width: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      transform: none !important;
+      background: var(--background-color-alt) !important;
+      z-index: 0 !important;
+    }
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
   // Override product full-bleed/full-bleed-under-header positioning so the
   // hero is a self-sized block: the image fills behind, the text wrapper is
   // overlaid on top (anchored bottom, height grows with content) — long titles
