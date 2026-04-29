@@ -1,8 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent
+} from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import type { EventbritePreview } from '@/lib/eventbrite';
+import { darkerForButton, samplePalette, textOnHex, type SampledPalette } from '@/lib/imageColors';
 import {
   DEFAULT_THEME,
   THEMES,
@@ -216,6 +224,62 @@ function PreviewSection({
   const [selectedOccurrenceIso, setSelectedOccurrenceIso] = useState<string | null>(
     occurrences[0]?.startIso ?? null
   );
+  const [useEventColours, setUseEventColours] = useState(false);
+  const [sampledPalette, setSampledPalette] = useState<SampledPalette | null>(null);
+
+  const displayImageUrl = hasUserPreview
+    ? preview.imageUrl
+    : sampleImageFor(theme);
+
+  useEffect(() => {
+    if (!useEventColours || !displayImageUrl) {
+      setSampledPalette(null);
+      return;
+    }
+    let cancelled = false;
+    samplePalette(displayImageUrl).then((p) => {
+      if (!cancelled) setSampledPalette(p);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [useEventColours, displayImageUrl]);
+
+  const frameStyle = useMemo<CSSProperties | undefined>(() => {
+    if (!useEventColours || !sampledPalette) return undefined;
+
+    // Always override both the regular and "-alt" button tokens with the
+    // sampled primary. Different themes use different selectors for the
+    // hero button — base/clean/bold/simple use --button-primary-background,
+    // bright uses the same, and vivid/organic use --button-primary-background-alt.
+    // Setting both means whichever one paints, it lands on our colour.
+    const base: CSSProperties = {
+      '--button-primary-background': sampledPalette.primary,
+      '--button-primary-color': sampledPalette.primaryText,
+      '--button-primary-background-alt': sampledPalette.primary,
+      '--button-primary-color-alt': sampledPalette.primaryText
+    } as CSSProperties;
+
+    // Themes with an accent strip behind the hero text — colour the strip
+    // with the sampled primary AND override the buttons to use the
+    // contrasting accent so they pop against the strip.
+    const altThemes: ThemeId[] = ['vivid', 'organic', 'bright'];
+    if (altThemes.includes(theme)) {
+      // Pick the darker of primary/accent for the button so it's never a
+      // washed-out white/pale; if both are too light, fall back to a deep
+      // grey so the button stays legible against the strip.
+      const buttonBg = darkerForButton(sampledPalette.primary, sampledPalette.accent);
+      return {
+        '--background-color-alt': sampledPalette.primary,
+        '--text-color-alt': sampledPalette.primaryText,
+        '--button-primary-background': buttonBg,
+        '--button-primary-color': textOnHex(buttonBg),
+        '--button-primary-background-alt': buttonBg,
+        '--button-primary-color-alt': textOnHex(buttonBg)
+      } as CSSProperties;
+    }
+    return base;
+  }, [useEventColours, sampledPalette, theme]);
 
   function handleBuyClick() {
     setTab(hasDateStep ? 'date' : 'tickets');
@@ -292,14 +356,27 @@ function PreviewSection({
           <div className="tt-theme-dropdown-wrap">
             <ThemeDropdown theme={theme} setTheme={setTheme} />
           </div>
+          <button
+            type="button"
+            className={`tt-event-colours-toggle${useEventColours ? ' tt-event-colours-toggle--on' : ''}`}
+            onClick={() => setUseEventColours((v) => !v)}
+            aria-pressed={useEventColours}
+            title="Sample colours from the event image"
+          >
+            <i className="fa-solid fa-palette" aria-hidden="true" />
+            <span>Auto color</span>
+            <span className="tt-event-colours-toggle__switch" aria-hidden="true">
+              <span className="tt-event-colours-toggle__thumb" />
+            </span>
+          </button>
           </nav>
 
-          <div className="tt-preview-frame">
+          <div className="tt-preview-frame" style={frameStyle}>
             <EventPreview
               preview={
                 hasUserPreview
                   ? preview
-                  : { ...preview, imageUrl: sampleImageFor(theme) }
+                  : { ...preview, imageUrl: displayImageUrl }
               }
               onBuyClick={handleBuyClick}
               headerVariation={headerVariationFor(theme)}

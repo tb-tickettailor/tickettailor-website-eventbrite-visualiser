@@ -197,6 +197,63 @@ $white: #FFFFFF;
   width: 100%;
 }
 
+// Toggle: use sampled image colours instead of theme defaults
+.tt-event-colours-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.55rem 0.4rem 0.75rem;
+  background: $white;
+  border: 1px solid rgba($navy, 0.12);
+  border-radius: 100vw;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $navy;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+
+  i { font-size: 0.85rem; color: rgba($navy, 0.6); }
+
+  &:hover { border-color: rgba($navy, 0.4); }
+
+  &__switch {
+    width: 28px;
+    height: 16px;
+    border-radius: 100vw;
+    background: rgba($navy, 0.18);
+    position: relative;
+    transition: background 0.2s;
+    flex: 0 0 28px;
+  }
+  &__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: $white;
+    transition: left 0.2s;
+  }
+
+  &--on {
+    background: rgba($peach, 0.4);
+    border-color: $orange;
+    i { color: $orange; }
+
+    .tt-event-colours-toggle__switch { background: $orange; }
+    .tt-event-colours-toggle__thumb { left: 14px; }
+  }
+
+  // On mobile / mid-width keep just the icon + switch to save space
+  @media (max-width: 600px) {
+    span:not(.tt-event-colours-toggle__switch):not(.tt-event-colours-toggle__thumb) {
+      display: none;
+    }
+  }
+}
+
 // Inline theme pills (desktop) — sits on the right side of the tabs
 .tt-theme-pills {
   display: none;
