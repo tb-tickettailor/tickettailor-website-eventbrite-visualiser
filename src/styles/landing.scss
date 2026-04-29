@@ -902,7 +902,7 @@ $white: #FFFFFF;
   background: #fff;
   border: 1px solid color-mix(in srgb, var(--text-color, #222) 12%, transparent);
   border-radius: 12px;
-  box-shadow: 0 1px 2px rgba(28, 35, 43, 0.04);
+  box-shadow: 0 12px 32px -8px rgba(28, 35, 43, 0.18), 0 2px 6px rgba(28, 35, 43, 0.06);
   padding: 0 1.1rem;
   margin-bottom: 1rem;
 }
