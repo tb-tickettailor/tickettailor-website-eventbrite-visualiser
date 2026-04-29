@@ -240,7 +240,7 @@ function PreviewSection({
               className={`tt-preview-tab${tab === 'date' ? ' tt-preview-tab--active' : ''}`}
               onClick={() => setTab('date')}
             >
-              <i className="fa-solid fa-calendar-days" aria-hidden="true" /> Pick a date
+              <i className="fa-solid fa-calendar-days" aria-hidden="true" /> Dates
             </button>
           ) : null}
           <button
