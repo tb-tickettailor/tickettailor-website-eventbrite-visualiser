@@ -251,7 +251,25 @@ function PreviewSection({
           >
             <i className="fa-solid fa-ticket" aria-hidden="true" /> Tickets
           </button>
-          <ThemeDropdown theme={theme} setTheme={setTheme} />
+          <div className="tt-theme-pills" role="radiogroup" aria-label="Choose a theme">
+            {THEMES.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="radio"
+                aria-checked={theme === t.id}
+                className={`tt-theme-pill${theme === t.id ? ' tt-theme-pill--active' : ''}`}
+                onClick={() => setTheme(t.id)}
+                title={t.label}
+              >
+                <span className="tt-theme-pill__dot" style={{ background: t.accent }} aria-hidden="true" />
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <div className="tt-theme-dropdown-wrap">
+            <ThemeDropdown theme={theme} setTheme={setTheme} />
+          </div>
           </nav>
 
           <div className="tt-preview-frame">

@@ -7,15 +7,22 @@ export type HeaderVariation =
   | 'side-by-side'
   | 'side-by-side-reverse';
 
-export const THEMES: { id: ThemeId; label: string; headerVariation: HeaderVariation }[] = [
-  { id: 'base', label: 'Base', headerVariation: 'full-width' },
-  { id: 'basic', label: 'Basic', headerVariation: 'full-bleed' },
-  { id: 'bold', label: 'Bold', headerVariation: 'full-bleed' },
-  { id: 'bright', label: 'Bright', headerVariation: 'side-by-side-reverse' },
-  { id: 'clean', label: 'Clean', headerVariation: 'full-width' },
-  { id: 'organic', label: 'Organic', headerVariation: 'full-width' },
-  { id: 'simple', label: 'Simple', headerVariation: 'full-width' },
-  { id: 'vivid', label: 'Vivid', headerVariation: 'full-bleed' }
+export type ThemeMeta = {
+  id: ThemeId;
+  label: string;
+  headerVariation: HeaderVariation;
+  accent: string;
+};
+
+export const THEMES: ThemeMeta[] = [
+  { id: 'base', label: 'Base', headerVariation: 'full-width', accent: '#222222' },
+  { id: 'basic', label: 'Basic', headerVariation: 'full-bleed', accent: '#426185' },
+  { id: 'bold', label: 'Bold', headerVariation: 'full-bleed', accent: '#0b0a0a' },
+  { id: 'bright', label: 'Bright', headerVariation: 'side-by-side-reverse', accent: '#d5ff01' },
+  { id: 'clean', label: 'Clean', headerVariation: 'full-width', accent: '#3a3a3a' },
+  { id: 'organic', label: 'Organic', headerVariation: 'full-width', accent: '#7a6f56' },
+  { id: 'simple', label: 'Simple', headerVariation: 'full-width', accent: '#408439' },
+  { id: 'vivid', label: 'Vivid', headerVariation: 'full-bleed', accent: '#ff527e' }
 ];
 
 export const DEFAULT_THEME: ThemeId = 'base';
