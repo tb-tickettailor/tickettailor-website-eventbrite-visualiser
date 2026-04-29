@@ -444,8 +444,8 @@ $white: #FFFFFF;
     display: none;
   }
 
-  // Below ~600px the tabs row gets cramped — pull the dropdown above the tabs
-  // and span full width so the layout breathes.
+  // On mobile, pull the dropdown above the tabs and span full width.
+  // 600–1099px: keep it right-aligned in the tabs row.
   @media (max-width: 600px) {
     order: -1;
     width: 100%;
@@ -626,7 +626,6 @@ $white: #FFFFFF;
   z-index: 100000;
 
   @media (max-width: 600px) {
-    flex-wrap: nowrap;
     padding-left: 0;
   }
 
