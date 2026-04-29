@@ -625,9 +625,6 @@ $white: #FFFFFF;
   position: relative;
   z-index: 100000;
 
-  @media (max-width: 600px) {
-    padding-left: 0;
-  }
 
   .tt-preview-tab {
     flex: 0 0 auto;
