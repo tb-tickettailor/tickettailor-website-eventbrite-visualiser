@@ -145,6 +145,22 @@ export default function Home() {
               disabled={loading}
               aria-label="Eventbrite URL"
             />
+            {hasUserPreview ? (
+              <button
+                type="button"
+                className="tt-form__clear"
+                onClick={() => {
+                  setUrl('');
+                  setPreview(SAMPLE_PREVIEW);
+                  setHasUserPreview(false);
+                  setError(null);
+                  setShowCaptcha(false);
+                }}
+                aria-label="Clear URL and reset preview"
+              >
+                <i className="fa-solid fa-xmark" aria-hidden="true" />
+              </button>
+            ) : null}
             <button className="tt-button tt-button--navy" type="submit" disabled={loading || url.length === 0}>
               {loading ? 'Loading…' : 'Preview it'}
             </button>

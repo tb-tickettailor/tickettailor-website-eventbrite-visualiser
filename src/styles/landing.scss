@@ -149,6 +149,25 @@ $white: #FFFFFF;
   > .tt-button {
     flex: 0 0 auto;
   }
+
+  &__clear {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba($navy, 0.12);
+    background: transparent;
+    color: $navy;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    &:hover { border-color: $navy; background: rgba($navy, 0.05); }
+  }
 }
 
 .tt-error {
