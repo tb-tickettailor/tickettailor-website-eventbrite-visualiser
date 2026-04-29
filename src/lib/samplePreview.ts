@@ -14,7 +14,7 @@ export const SAMPLE_PREVIEW: EventbritePreview = {
   venueLocation: '123 Example Street, London, EC1A 1AA, United Kingdom',
   isOnline: false,
   imageUrl:
-    'https://res.cloudinary.com/ticket-tailor/image/upload/v1744709898/production/userfiles/global/base-square-1.jpg',
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=80&auto=format&fit=crop',
   sourceUrl: 'https://www.eventbrite.com',
   isSeries: true,
   organizerName: 'Your event brand',
