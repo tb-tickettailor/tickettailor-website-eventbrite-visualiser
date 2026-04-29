@@ -11,7 +11,7 @@ export const SAMPLE_PREVIEW: EventbritePreview = {
   endDate: nextSaturdayAt(22, 0).toISOString(),
   timezone: null,
   venueName: 'Ticket Tailor HQ',
-  venueLocation: 'WeWork, 167-169 Great Portland Street, London, W1W 5PF, United Kingdom',
+  venueLocation: 'Unit 219, Mare Street Studios, 203-213 Mare Street, London, E8 3LY',
   isOnline: false,
   imageUrl:
     'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=80&auto=format&fit=crop',

@@ -118,7 +118,7 @@ export function EventPreview({ preview, onBuyClick, headerVariation }: Props) {
                 title={`Map of ${preview.venueLocation}`}
                 src={`https://www.google.com/maps?q=${encodeURIComponent(preview.venueLocation)}&output=embed`}
                 width="100%"
-                height="320"
+                height="450"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 style={{ border: 0, borderRadius: 8, marginTop: '1rem' }}
