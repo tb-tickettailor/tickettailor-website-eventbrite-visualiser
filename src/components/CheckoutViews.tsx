@@ -267,7 +267,7 @@ export function SelectTicketsView({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Import event
+              Import your event
             </a>
           </div>
         </div>
