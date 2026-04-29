@@ -20,18 +20,11 @@ const UNSPLASH = (id: string) =>
 
 export const THEMES: ThemeMeta[] = [
   {
-    id: 'clean',
-    label: 'Clean',
-    headerVariation: 'full-width',
-    accent: '#3a3a3a',
-    sampleImage: UNSPLASH('photo-1492684223066-81342ee5ff30')
-  },
-  {
     id: 'base',
     label: 'Base',
     headerVariation: 'full-width',
-    accent: '#222222',
-    sampleImage: UNSPLASH('photo-1540575467063-178a50c2df87')
+    accent: '#ffffff',
+    sampleImage: UNSPLASH('photo-1492684223066-81342ee5ff30')
   },
   {
     id: 'bold',
@@ -55,6 +48,13 @@ export const THEMES: ThemeMeta[] = [
     sampleImage: UNSPLASH('photo-1470770841072-f978cf4d019e')
   },
   {
+    id: 'clean',
+    label: 'Clean',
+    headerVariation: 'full-width',
+    accent: '#3a3a3a',
+    sampleImage: UNSPLASH('photo-1540575467063-178a50c2df87')
+  },
+  {
     id: 'simple',
     label: 'Simple',
     headerVariation: 'full-width',
@@ -70,7 +70,7 @@ export const THEMES: ThemeMeta[] = [
   }
 ];
 
-export const DEFAULT_THEME: ThemeId = 'clean';
+export const DEFAULT_THEME: ThemeId = 'base';
 
 export function themeStylesheetUrl(id: ThemeId): string {
   return `/themes/${id}.css`;
