@@ -13,7 +13,7 @@ $white: #FFFFFF;
 .tt-site {
   font-family: var(--font-open-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   color: $navy;
-  background: $white;
+  background: #FDF9F8;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -92,7 +92,6 @@ $white: #FFFFFF;
 
 // Hero
 .tt-hero {
-  background: $gray;
   padding: 4rem 1.5rem 5rem;
   text-align: center;
   position: relative;
@@ -194,7 +193,6 @@ $white: #FFFFFF;
 // Preview section
 .tt-preview-section {
   padding: 0 1.5rem 4rem;
-  background: $light-gray;
   flex: 1;
 
   @media (max-width: 600px) {
@@ -231,11 +229,14 @@ $white: #FFFFFF;
   font-weight: 600;
   color: $navy;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
 
   i { font-size: 0.85rem; color: rgba($navy, 0.6); }
 
-  &:hover { border-color: rgba($navy, 0.4); }
+  &:hover {
+    border-color: rgba($navy, 0.4);
+    transform: translateY(-1px);
+  }
 
   &__switch {
     width: 28px;
