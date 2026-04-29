@@ -397,19 +397,25 @@ function PreviewSection({
             />
           </div>
           {hasUserPreview ? (
-            <button
-              type="button"
-              className={`tt-event-colours-toggle${useEventColours ? ' tt-event-colours-toggle--on' : ''}`}
-              onClick={() => setUseEventColours((v) => !v)}
-              aria-pressed={useEventColours}
-              title="Sample colours from the event image"
-            >
-              <i className="fa-solid fa-palette" aria-hidden="true" />
-              <span>Auto color</span>
-              <span className="tt-event-colours-toggle__switch" aria-hidden="true">
-                <span className="tt-event-colours-toggle__thumb" />
+            <span className="tt-tooltip-host">
+              <button
+                type="button"
+                className={`tt-event-colours-toggle${useEventColours ? ' tt-event-colours-toggle--on' : ''}`}
+                onClick={() => setUseEventColours((v) => !v)}
+                aria-pressed={useEventColours}
+                aria-describedby="auto-color-tooltip"
+              >
+                <i className="fa-solid fa-palette" aria-hidden="true" />
+                <span>Auto color</span>
+                <span className="tt-event-colours-toggle__switch" aria-hidden="true">
+                  <span className="tt-event-colours-toggle__thumb" />
+                </span>
+              </button>
+              <span className="tt-tooltip" role="tooltip" id="auto-color-tooltip">
+                Pulls colours from your event image to style buttons and accents
+                automatically. You can fully customise the look once you sign up.
               </span>
-            </button>
+            </span>
           ) : null}
           </nav>
 

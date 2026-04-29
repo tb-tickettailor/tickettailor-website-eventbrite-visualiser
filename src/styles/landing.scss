@@ -257,6 +257,47 @@ $white: #FFFFFF;
 }
 
 // Toggle: use sampled image colours instead of theme defaults
+.tt-tooltip-host {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+
+  > .tt-tooltip {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 240px;
+    max-width: calc(100vw - 2rem);
+    background: $navy;
+    color: $white;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.15s, transform 0.15s;
+    z-index: 100002;
+
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 1rem;
+      border: 6px solid transparent;
+      border-bottom-color: $navy;
+    }
+  }
+
+  &:hover > .tt-tooltip,
+  &:focus-within > .tt-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .tt-event-colours-toggle {
   display: inline-flex;
 
