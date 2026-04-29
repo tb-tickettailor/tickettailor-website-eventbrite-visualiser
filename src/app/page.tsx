@@ -129,6 +129,7 @@ export default function Home() {
             <Logo />
           </a>
           <nav className="tt-header__nav" aria-label="Primary">
+            <a href="https://www.tickettailor.com/">Back to website</a>
             <a href="https://www.tickettailor.com/eventbrite-alternative">
               Compare with Eventbrite
             </a>
