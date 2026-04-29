@@ -263,7 +263,11 @@ function PreviewSection({
                 onClick={() => setTheme(t.id)}
                 title={t.label}
               >
-                <span className="tt-theme-pill__dot" style={{ background: t.accent }} aria-hidden="true" />
+                <span
+                  className={`tt-theme-pill__dot${t.accent === 'split-bw' ? ' tt-theme-pill__dot--split' : ''}`}
+                  style={t.accent === 'split-bw' ? undefined : { background: t.accent }}
+                  aria-hidden="true"
+                />
                 {t.label}
               </button>
             ))}

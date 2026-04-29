@@ -209,6 +209,11 @@ $white: #FFFFFF;
     border-radius: 50%;
     border: 1px solid rgba($navy, 0.12);
     flex: 0 0 12px;
+
+    &--split {
+      background: linear-gradient(90deg, #000 0 50%, #fff 50% 100%);
+      border-color: rgba($navy, 0.25);
+    }
   }
 
   &:hover:not(.tt-theme-pill--active) {
@@ -372,10 +377,10 @@ $white: #FFFFFF;
     background: rgba($navy, 0.05);
     border: 1px solid transparent;
     border-bottom: none;
-    border-radius: 12px 12px 0 0;
-    padding: 0.85rem 1.5rem;
+    border-radius: 10px 10px 0 0;
+    padding: 0.6rem 1rem;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: rgba($navy, 0.65);
     cursor: pointer;
@@ -384,7 +389,7 @@ $white: #FFFFFF;
     gap: 0.5rem;
     transition: background 0.15s, color 0.15s;
 
-    i { font-size: 1rem; }
+    i { font-size: 0.85rem; }
 
     &:hover:not(:disabled):not(.tt-preview-tab--active) {
       background: rgba($navy, 0.08);
