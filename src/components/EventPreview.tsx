@@ -8,12 +8,18 @@ type Props = {
 };
 
 export function EventPreview({ preview, onBuyClick, headerVariation }: Props) {
-  // For series, the JSON-LD start/end describes the whole envelope (e.g. Jan
-  // → May). Prefer the first concrete occurrence so the hero shows a real
-  // single-event window. Falls back to the series-level dates otherwise.
-  const heroStart = preview.occurrences[0]?.start ?? preview.startDate;
-  const heroEnd = preview.occurrences[0]?.end ?? preview.endDate;
-  const dateLabel = formatEventDate(heroStart, heroEnd);
+  // Multi-occurrence series: show a "Multiple dates and times" placeholder
+  // instead of any specific date.
+  // Single occurrence: show that occurrence's window (the real upcoming event).
+  // No occurrences: fall back to the JSON-LD start/end.
+  let dateLabel: string;
+  if (preview.occurrences.length > 1) {
+    dateLabel = 'Multiple dates and times';
+  } else if (preview.occurrences.length === 1) {
+    dateLabel = formatEventDate(preview.occurrences[0].start, preview.occurrences[0].end);
+  } else {
+    dateLabel = formatEventDate(preview.startDate, preview.endDate);
+  }
   const locationLabel = preview.isOnline
     ? 'Online event'
     : preview.venueLocation ?? preview.venueName ?? '';
