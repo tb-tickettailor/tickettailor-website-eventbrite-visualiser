@@ -36,7 +36,7 @@ export function computeSavings(event: EventbritePreview): SavingsBreakdown | nul
   const ttFee = TT_SERVICE_FIXED + price * TT_PAYMENT_PCT;
   const saving = ebFee - ttFee;
 
-  if (saving < 0.5) return null; // not worth shouting about
+  if (saving <= 0) return null;
 
   return {
     perTicket: round2(saving),
