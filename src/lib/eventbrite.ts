@@ -212,7 +212,7 @@ function parseEventFromHtml(html: string, finalUrl: string): Omit<EventbritePrev
     venueName: null,
     venueLocation: null,
     isOnline: false,
-    imageUrl: og.image ?? null,
+    imageUrl: upscaleImage(og.image ?? null),
     sourceUrl: finalUrl
   };
 }
@@ -267,10 +267,26 @@ function extractJsonLdEvent(html: string): JsonLdEvent | null {
   return null;
 }
 
+// Schema.org event types we want to recognise. Includes the base "Event" type
+// plus all the well-known subtypes we'd actually encounter on Eventbrite.
+const EVENT_TYPE_HINTS = [
+  'event',
+  'festival',
+  'concert',
+  'exhibition',
+  'screening',
+  'conference',
+  'workshop'
+];
+
 function isEventType(type: string | string[] | undefined): boolean {
   if (!type) return false;
   const types = Array.isArray(type) ? type : [type];
-  return types.some((t) => typeof t === 'string' && t.toLowerCase().includes('event'));
+  return types.some(
+    (t) =>
+      typeof t === 'string' &&
+      EVENT_TYPE_HINTS.some((hint) => t.toLowerCase().includes(hint))
+  );
 }
 
 function jsonLdToPreview(
