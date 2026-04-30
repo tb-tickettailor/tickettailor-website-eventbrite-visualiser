@@ -11,6 +11,7 @@ import {
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import type { EventbritePreview } from '@/lib/eventbrite';
 import { darkerForButton, samplePalette, textOnHex, type SampledPalette } from '@/lib/imageColors';
+import { useFocusTrap } from '@/lib/useFocusTrap';
 import {
   DEFAULT_THEME,
   THEMES,
@@ -128,6 +129,9 @@ export default function Home() {
 
   return (
     <div className="tt-site">
+      <a href="#main" className="tt-skip-link">
+        Skip to main content
+      </a>
       <header className="tt-header">
         <div className="tt-header__inner">
           <a className="tt-header__logo" href="https://www.tickettailor.com" aria-label="Ticket Tailor">
@@ -145,6 +149,7 @@ export default function Home() {
         </div>
       </header>
 
+      <main id="main">
       <section className="tt-hero">
         <div className="tt-hero__inner">
           <h1>See your Eventbrite event on Ticket Tailor</h1>
@@ -181,7 +186,15 @@ export default function Home() {
             </button>
           </form>
 
-          {error ? <div className="tt-error" role="alert">{error}</div> : null}
+          <span className="tt-sr-only" aria-live="polite">
+            {loading ? 'Loading event preview' : ''}
+            {hasUserPreview && !loading ? 'Event preview loaded' : ''}
+          </span>
+          {error ? (
+            <div className="tt-error" role="alert" aria-live="assertive">
+              {error}
+            </div>
+          ) : null}
           {showCaptcha && TURNSTILE_SITE_KEY ? (
             <div className="tt-captcha">
               <Turnstile
@@ -206,6 +219,7 @@ export default function Home() {
           />
         </div>
       ) : null}
+      </main>
 
       <footer className="tt-footer">
         Standalone preview · powered by <a href="https://www.tickettailor.com">Ticket Tailor</a>
@@ -436,36 +450,17 @@ function PreviewSection({
               headerVariation={headerVariationFor(theme)}
             />
             {tab !== 'page' ? (
-              <div
-                className="tt-checkout-overlay"
-                onClick={() => setTab('page')}
-                role="presentation"
-              >
-                <div className="tt-checkout-overlay__panel" onClick={(e) => e.stopPropagation()}>
-                  <button
-                    type="button"
-                    className="tt-checkout-overlay__close"
-                    onClick={() => setTab('page')}
-                    aria-label="Close"
-                  >
-                    <i className="fa-solid fa-xmark" aria-hidden="true" />
-                  </button>
-                  {tab === 'date' ? (
-                    <SelectDateView
-                      event={preview}
-                      occurrences={occurrences}
-                      selectedIso={selectedOccurrenceIso}
-                      onPick={pickDate}
-                    />
-                  ) : (
-                    <SelectTicketsView
-                      event={preview}
-                      occurrence={selectedOccurrence}
-                      onBack={hasDateStep ? () => setTab('date') : undefined}
-                    />
-                  )}
-                </div>
-              </div>
+              <CheckoutOverlay
+                tab={tab}
+                event={preview}
+                occurrences={occurrences}
+                selectedIso={selectedOccurrenceIso}
+                hasDateStep={hasDateStep}
+                selectedOccurrence={selectedOccurrence}
+                onClose={() => setTab('page')}
+                onPickDate={pickDate}
+                onBack={() => setTab('date')}
+              />
             ) : null}
           </div>
         </div>
@@ -484,5 +479,74 @@ function PreviewSection({
         </a>
       </div>
     </>
+  );
+}
+
+function CheckoutOverlay({
+  tab,
+  event,
+  occurrences,
+  selectedIso,
+  hasDateStep,
+  selectedOccurrence,
+  onClose,
+  onPickDate,
+  onBack
+}: {
+  tab: 'date' | 'tickets';
+  event: EventbritePreview;
+  occurrences: ReturnType<typeof useOccurrences>;
+  selectedIso: string | null;
+  hasDateStep: boolean;
+  selectedOccurrence: ReturnType<typeof useOccurrences>[number] | null;
+  onClose: () => void;
+  onPickDate: (iso: string) => void;
+  onBack: () => void;
+}) {
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  useFocusTrap(panelRef, true);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div className="tt-checkout-overlay" onClick={onClose} role="presentation">
+      <div
+        ref={panelRef}
+        className="tt-checkout-overlay__panel"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={tab === 'date' ? 'Choose a date' : 'Select tickets'}
+      >
+        <button
+          type="button"
+          className="tt-checkout-overlay__close"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <i className="fa-solid fa-xmark" aria-hidden="true" />
+        </button>
+        {tab === 'date' ? (
+          <SelectDateView
+            event={event}
+            occurrences={occurrences}
+            selectedIso={selectedIso}
+            onPick={onPickDate}
+          />
+        ) : (
+          <SelectTicketsView
+            event={event}
+            occurrence={selectedOccurrence}
+            onBack={hasDateStep ? onBack : undefined}
+          />
+        )}
+      </div>
+    </div>
   );
 }

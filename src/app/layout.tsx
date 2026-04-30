@@ -17,10 +17,55 @@ const coustard = Coustard({
   display: 'swap'
 });
 
+const SITE_URL = 'https://eventbrite-preview.vercel.app';
+const TITLE = 'See your Eventbrite event on Ticket Tailor';
+const DESCRIPTION =
+  'Paste any public Eventbrite URL and preview your event on Ticket Tailor instantly. Try our themes, see the per-ticket savings vs Eventbrite, and import in minutes.';
+
 export const metadata: Metadata = {
-  title: 'See your event on Ticket Tailor',
-  description:
-    'Paste an Eventbrite URL and instantly see what your event would look like on Ticket Tailor.'
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE,
+    template: '%s · Ticket Tailor'
+  },
+  description: DESCRIPTION,
+  keywords: [
+    'eventbrite alternative',
+    'ticket tailor',
+    'event ticketing',
+    'eventbrite import',
+    'ticketing comparison',
+    'event preview'
+  ],
+  authors: [{ name: 'Ticket Tailor', url: 'https://www.tickettailor.com' }],
+  creator: 'Ticket Tailor',
+  publisher: 'Ticket Tailor',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: SITE_URL,
+    title: TITLE,
+    description: DESCRIPTION,
+    siteName: 'Ticket Tailor',
+    locale: 'en_GB'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+    creator: '@tickettailor'
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' }
+  }
+};
+
+export const viewport = {
+  themeColor: '#222432',
+  width: 'device-width',
+  initialScale: 1
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
