@@ -27,6 +27,29 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${openSans.variable} ${coustard.variable}`}>
       <head>
+        {/* Preload every theme's primary font up-front so switching themes
+            doesn't trigger a noticeable webfont fetch. ~150KB total, cached
+            after first load. */}
+        {[
+          '/fonts/dela-gothic-one/DelaGothicOne-Regular.woff2',
+          '/fonts/inter/Inter-Regular.woff2',
+          '/fonts/lexend/Lexend-Regular.woff2',
+          '/fonts/noto-serif/NotoSerif-Regular.woff2',
+          '/fonts/oswald/Oswald-Regular.woff2',
+          '/fonts/poppins/Poppins-Regular.woff2',
+          '/fonts/roboto-mono/RobotoMono-Regular.woff2',
+          '/fonts/roboto/Roboto-Regular.woff2',
+          '/fonts/rubik/Rubik-Light.woff2'
+        ].map((href) => (
+          <link
+            key={href}
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href={href}
+            crossOrigin="anonymous"
+          />
+        ))}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
