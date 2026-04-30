@@ -296,25 +296,61 @@ function jsonLdToPreview(
   };
 }
 
-// Eventbrite proxies preview images via img.evbuc.com with width caps and a
-// signed checksum. Pull the original cdn.evbuc.com URL out of the proxy path
-// so we get the full-resolution image, no checksum mismatch.
+// Eventbrite has a few flavours of image URL we need to unwrap to get a
+// fetchable, full-resolution cdn.evbuc.com URL:
+//
+//   1. img.evbuc.com/<encoded cdn URL>?... — the standard signed proxy
+//   2. /e/_next/image?url=<encoded img.evbuc.com URL>&w=...&q=... — relative
+//      Next.js image proxy used on some marketing pages
+//
+// Walk the chain until we hit the underlying cdn.evbuc.com URL.
 function upscaleImage(url: string | null): string | null {
   if (!url) return null;
-  try {
-    const u = new URL(url);
-    if (u.hostname === 'img.evbuc.com') {
-      // The proxy path is the URL-encoded original cdn URL.
-      const pathname = u.pathname.replace(/^\//, '');
-      const decoded = decodeURIComponent(pathname);
+
+  let current: string | null = url;
+
+  // Resolve relative `/e/_next/image?url=...` against the eventbrite domain
+  // so we can parse it.
+  if (current.startsWith('/')) {
+    try {
+      current = new URL(current, 'https://www.eventbrite.com').toString();
+    } catch {
+      return url;
+    }
+  }
+
+  for (let i = 0; i < 4; i++) {
+    let parsed: URL;
+    try {
+      parsed = new URL(current);
+    } catch {
+      return current;
+    }
+
+    // Already at the source — done.
+    if (parsed.hostname === 'cdn.evbuc.com') return current;
+
+    // Next.js image proxy: ?url=<encoded inner URL>
+    if (parsed.pathname.includes('_next/image')) {
+      const inner = parsed.searchParams.get('url');
+      if (!inner) return current;
+      current = inner;
+      continue;
+    }
+
+    // img.evbuc.com proxy: path is encoded cdn URL
+    if (parsed.hostname === 'img.evbuc.com') {
+      const decoded = decodeURIComponent(parsed.pathname.replace(/^\//, ''));
       if (decoded.startsWith('https://cdn.evbuc.com/')) {
         return decoded;
       }
+      return current;
     }
-  } catch {
-    // fall through to original
+
+    return current;
   }
-  return url;
+
+  return current;
 }
 
 function pickImage(image: JsonLdEvent['image']): string | null {
