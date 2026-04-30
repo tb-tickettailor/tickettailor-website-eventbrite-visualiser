@@ -127,8 +127,9 @@ $white: #FFFFFF;
     gap: 0.4rem;
     margin-left: auto;
 
-    @media (max-width: 600px) {
-      .tt-button:not(.tt-button--navy) { display: none; }
+    .tt-button {
+      padding: 1rem 1.75rem;
+      font-size: 1.05rem;
     }
   }
 }

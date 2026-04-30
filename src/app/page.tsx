@@ -145,23 +145,7 @@ export default function Home() {
           </nav>
           <div className="tt-header__buttons">
             <a
-              className="tt-button tt-button--gray tt-button--condensed"
-              href="https://www.tickettailor.com/find-your-tickets"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Find your tickets
-            </a>
-            <a
-              className="tt-button tt-button--gray tt-button--condensed"
-              href="https://app.tickettailor.com/login"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Login
-            </a>
-            <a
-              className="tt-button tt-button--navy tt-button--condensed"
+              className="tt-button tt-button--navy"
               href={SIGN_UP_URL}
               target="_blank"
               rel="noopener noreferrer"
