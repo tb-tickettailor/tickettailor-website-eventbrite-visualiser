@@ -470,7 +470,7 @@ function PreviewSection({
           </div>
         </div>
       </section>
-      <div className={`tt-sticky-cta${hasUserPreview ? ' tt-sticky-cta--visible' : ''}`}>
+      <div className="tt-sticky-cta tt-sticky-cta--visible">
         <span className="tt-sticky-cta__label">
           Like what you see? Bring your event over in minutes.
         </span>
