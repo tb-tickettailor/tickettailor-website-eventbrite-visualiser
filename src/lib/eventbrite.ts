@@ -12,6 +12,7 @@ export type EventbritePriceRange = {
 
 export type EventbritePreview = {
   name: string;
+  imageUrls: string[];
   description: string | null;
   startDate: string | null;
   endDate: string | null;
@@ -80,6 +81,15 @@ export async function fetchEventbritePreview(url: string): Promise<EventbritePre
   const apiHost = extractApiHost(finalUrl);
 
   const base = parseEventFromHtml(html, finalUrl);
+  const galleryImages = extractGalleryImages(html);
+
+  // Use the gallery for slideshow if it has multiple, else fall back to the
+  // single JSON-LD image. Always put the JSON-LD image first if present.
+  const imageUrls: string[] = (() => {
+    if (galleryImages.length > 1) return galleryImages;
+    if (base.imageUrl) return [base.imageUrl];
+    return galleryImages;
+  })();
 
   let occurrences: EventbriteOccurrence[] = [];
   let priceRange: EventbritePriceRange | null = null;
@@ -89,7 +99,46 @@ export async function fetchEventbritePreview(url: string): Promise<EventbritePre
     priceRange = apiData.priceRange;
   }
 
-  return { ...base, isSeries, occurrences, priceRange, organizerName };
+  return { ...base, imageUrls, isSeries, occurrences, priceRange, organizerName };
+}
+
+// Pull all gallery images from the embedded "images":[{ url:... },...] block
+// in the page HTML. We use the largest signed variant available for each.
+function extractGalleryImages(html: string): string[] {
+  // Find each `"images":[ ... ]` block and pull out the `url` field of each
+  // entry, plus its largest cropped variant if present.
+  const out: string[] = [];
+  const blockRe = /"images"\s*:\s*\[(.*?)\]/g;
+  let block: RegExpExecArray | null;
+  while ((block = blockRe.exec(html)) !== null) {
+    const inner = block[1];
+    // Each image is its own object — match the leading `"url"` plus optional
+    // larger cropped variants. Prefer the largest image we can find for each.
+    const objRe = /\{[^}]*?"url"\s*:\s*"([^"]*)"[^}]*?\}/g;
+    let obj: RegExpExecArray | null;
+    while ((obj = objRe.exec(inner)) !== null) {
+      const raw = obj[0];
+      // Try the biggest cropped variant first, fall back to plain url.
+      const big =
+        raw.match(/"croppedLogoUrl1880"\s*:\s*"([^"]+)"/)?.[1] ??
+        raw.match(/"croppedLogoUrl940"\s*:\s*"([^"]+)"/)?.[1] ??
+        obj[1];
+      if (big && big.length > 0) {
+        const decoded = decodeJsonString(big);
+        const upscaled = upscaleImage(decoded);
+        if (upscaled && !out.includes(upscaled)) out.push(upscaled);
+      }
+    }
+    if (out.length > 0) break;
+  }
+  return out;
+}
+
+function decodeJsonString(s: string): string {
+  // Handle the \u003 etc. encodings that come from JSON embedded in HTML.
+  return s.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
+    String.fromCharCode(parseInt(hex, 16))
+  );
 }
 
 function extractOrganizerName(html: string): string | null {
@@ -196,7 +245,7 @@ function parseDestinationPrice(p: DestinationPrice | undefined): { currency: str
   return { currency: p.currency, value };
 }
 
-function parseEventFromHtml(html: string, finalUrl: string): Omit<EventbritePreview, 'isSeries' | 'occurrences' | 'priceRange' | 'organizerName'> {
+function parseEventFromHtml(html: string, finalUrl: string): Omit<EventbritePreview, 'isSeries' | 'occurrences' | 'priceRange' | 'organizerName' | 'imageUrls'> {
   const jsonLd = extractJsonLdEvent(html);
   if (jsonLd) {
     return jsonLdToPreview(jsonLd, finalUrl);
@@ -292,7 +341,7 @@ function isEventType(type: string | string[] | undefined): boolean {
 function jsonLdToPreview(
   event: JsonLdEvent,
   sourceUrl: string
-): Omit<EventbritePreview, 'isSeries' | 'occurrences' | 'priceRange' | 'organizerName'> {
+): Omit<EventbritePreview, 'isSeries' | 'occurrences' | 'priceRange' | 'organizerName' | 'imageUrls'> {
   const image = pickImage(event.image);
   const { venueName, venueLocation, isOnline } = extractLocation(event);
 

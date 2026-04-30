@@ -15,6 +15,9 @@ export const SAMPLE_PREVIEW: EventbritePreview = {
   isOnline: false,
   imageUrl:
     'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=80&auto=format&fit=crop',
+  imageUrls: [
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=2000&q=80&auto=format&fit=crop'
+  ],
   sourceUrl: 'https://www.eventbrite.com',
   isSeries: true,
   organizerName: 'Your event brand',

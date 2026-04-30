@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import type { EventbritePreview } from '@/lib/eventbrite';
 import type { HeaderVariation } from '@/lib/themes';
 
@@ -56,20 +59,11 @@ export function EventPreview({ preview, onBuyClick, headerVariation }: Props) {
     </header>
     <main id="tt-checkout--accessibility--main-content">
       <section
-        className={`hero detail-hero${preview.imageUrl ? '' : ' hero--no-image'}`}
+        className={`hero detail-hero${preview.imageUrls.length === 0 ? ' hero--no-image' : ''}`}
         data-variation={headerVariation}
       >
-        {preview.imageUrl ? (
-          <div className="hero__slides__container">
-            <ul className="hero__slides">
-              <li className="hero__slide" data-index="0">
-                <figure className="hero__slide-image">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={preview.imageUrl} alt={preview.name} />
-                </figure>
-              </li>
-            </ul>
-          </div>
+        {preview.imageUrls.length > 0 ? (
+          <HeroSlideshow images={preview.imageUrls} alt={preview.name} />
         ) : null}
         <div className="hero__wrapper">
           <div className="hero__content">
@@ -162,4 +156,77 @@ function formatEventDate(start: string | null, end: string | null): string {
       });
 
   return `${startLabel} – ${endLabel}`;
+}
+
+function HeroSlideshow({ images, alt }: { images: string[]; alt: string }) {
+  const [index, setIndex] = useState(0);
+  const total = images.length;
+  const multiple = total > 1;
+
+  // If the images array changes (new event loaded, or fewer slides than the
+  // current index), snap back to the first slide.
+  useEffect(() => {
+    setIndex((i) => (i >= images.length ? 0 : i));
+  }, [images]);
+
+  function go(delta: number) {
+    setIndex((i) => (i + delta + total) % total);
+  }
+
+  return (
+    <div className="hero__slides__container">
+      <ul className="hero__slides">
+        {images.map((src, i) => (
+          <li
+            key={src}
+            className="hero__slide"
+            data-index={i}
+            style={{ display: i === index ? 'block' : 'none' }}
+          >
+            <figure className="hero__slide-image">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt={alt} />
+            </figure>
+          </li>
+        ))}
+      </ul>
+      {multiple ? (
+        <div className="hero__controls">
+          <nav className="hero__pagination">
+            {images.map((_, i) => (
+              <button
+                type="button"
+                key={i}
+                className={`hero__pagination-item${i === index ? ' hero__pagination-item--active' : ''}`}
+                onClick={() => setIndex(i)}
+                aria-label={`Show image ${i + 1} of ${total}`}
+                aria-current={i === index}
+              />
+            ))}
+          </nav>
+          <nav className="hero__buttons">
+            <button
+              type="button"
+              className="hero__button hero__button--previous"
+              onClick={() => go(-1)}
+            >
+              <span className="screenreader-text">Previous slide</span>
+            </button>
+            <button
+              type="button"
+              className="hero__button hero__button--next"
+              onClick={() => go(1)}
+            >
+              <span className="screenreader-text">Next slide</span>
+            </button>
+          </nav>
+          <span className="hero__counter">
+            <span className="hero__counter-current">{index + 1}</span>
+            <span className="hero__counter-separator">of</span>
+            <span className="hero__counter-total">{total}</span>
+          </span>
+        </div>
+      ) : null}
+    </div>
+  );
 }
