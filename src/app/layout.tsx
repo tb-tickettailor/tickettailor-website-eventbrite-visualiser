@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Coustard, Open_Sans } from 'next/font/google';
+import Scripts from '@/components/Scripts';
 import '@/styles/main.scss';
 
 const openSans = Open_Sans({
@@ -125,7 +126,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }
         `}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-K4B6RL&gtm_auth=Uf1tdGnzovcVuPQ65z3Ddw&gtm_preview=env-2&gtm_cookies_win=x"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }
