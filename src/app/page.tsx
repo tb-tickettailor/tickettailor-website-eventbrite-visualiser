@@ -143,9 +143,32 @@ export default function Home() {
               Compare with Eventbrite
             </a>
           </nav>
-          <a className="tt-button tt-button--navy" href={SIGN_UP_URL} target="_blank" rel="noopener noreferrer">
-            Sign up free
-          </a>
+          <div className="tt-header__buttons">
+            <a
+              className="tt-button tt-button--gray tt-button--condensed"
+              href="https://www.tickettailor.com/find-your-tickets"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Find your tickets
+            </a>
+            <a
+              className="tt-button tt-button--gray tt-button--condensed"
+              href="https://app.tickettailor.com/login"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Login
+            </a>
+            <a
+              className="tt-button tt-button--navy tt-button--condensed"
+              href={SIGN_UP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Get started
+            </a>
+          </div>
         </div>
       </header>
 

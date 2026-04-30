@@ -69,32 +69,48 @@ $white: #FFFFFF;
   *, *::before, *::after { box-sizing: border-box; }
 }
 
-// Header
+// Header — mirrors tickettailor.com sizing/spacing
 .tt-header {
   background: $white;
-  border-bottom: 1px solid rgba($navy, 0.08);
-  padding: 1rem 0;
+  padding: 0.875em 0; // baseline * 0.5 (1.75em * 0.5)
 
   &__inner {
-    max-width: 1280px;
+    max-width: 1320px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
 
+    @media (max-width: 1020px) {
+      padding: 0 1.5rem;
+    }
     @media (max-width: 600px) {
-      padding: 0 0.75rem;
+      padding: 0 1rem;
     }
   }
 
-  &__logo svg { display: block; height: 38px; width: auto; }
+  &__logo {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 9em;
+
+    @media (min-width: 1020px) {
+      width: 13.125rem; // 210px
+    }
+
+    svg {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+  }
 
   &__nav {
     display: none;
-    gap: 1.75rem;
-    @media (min-width: 900px) { display: flex; }
+    margin: 0 auto;
+    gap: 1.5rem;
+    @media (min-width: 1020px) { display: flex; }
 
     a {
       color: $navy;
@@ -102,6 +118,17 @@ $white: #FFFFFF;
       font-weight: 600;
       font-size: 0.95rem;
       &:hover { opacity: 0.7; }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+
+    @media (max-width: 600px) {
+      .tt-button:not(.tt-button--navy) { display: none; }
     }
   }
 }
@@ -129,6 +156,11 @@ $white: #FFFFFF;
   &--navy { background: $navy; color: $white; }
   &--peach { background: $peach; color: $navy; }
   &--yellow { background: $yellow; color: $navy; }
+  &--gray { background: $gray; color: $navy; }
+  &--condensed {
+    padding: 0.55rem 1.1rem;
+    font-size: 0.95rem;
+  }
   &--ghost {
     background: transparent;
     color: $navy;
