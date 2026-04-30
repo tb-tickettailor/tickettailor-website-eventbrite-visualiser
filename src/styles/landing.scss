@@ -746,6 +746,19 @@ $white: #FFFFFF;
     max-width: 375px;
   }
 
+  // Slideshow prev/next: themes can colour these to match their alt-background
+  // tokens which on themes like Bright leaves the icon invisible (yellow-on-
+  // yellow). Force a consistent white circle with a dark chevron everywhere.
+  .hero__controls .hero__buttons .hero__button {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #1c232b !important;
+    border: 1px solid rgba(28, 35, 43, 0.08) !important;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.18) !important;
+
+    &:hover { background: #fff !important; }
+    &:after { color: #1c232b !important; }
+  }
+
   // The product's .hero rule applies --background-color-alt directly to the
   // hero element and uses .hero:after { width: 100vw } to break out of page
   // gutters. Inside our preview-frame (overflow: hidden) the 100vw trick gets
