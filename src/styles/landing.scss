@@ -71,7 +71,7 @@ $white: #FFFFFF;
 
 // Header — mirrors tickettailor.com sizing/spacing
 .tt-header {
-  background: $white;
+  background: transparent;
   padding: 0.875em 0; // baseline * 0.5 (1.75em * 0.5)
 
   &__inner {
@@ -81,6 +81,7 @@ $white: #FFFFFF;
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: relative;
 
     @media (max-width: 1020px) {
       padding: 0 1.5rem;
@@ -108,9 +109,15 @@ $white: #FFFFFF;
 
   &__nav {
     display: none;
-    margin: 0 auto;
     gap: 1.5rem;
-    @media (min-width: 1020px) { display: flex; }
+
+    @media (min-width: 1020px) {
+      display: flex;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
 
     a {
       color: $navy;
@@ -130,6 +137,11 @@ $white: #FFFFFF;
     .tt-button {
       padding: 1rem 1.75rem;
       font-size: 1.05rem;
+
+      @media (max-width: 600px) {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.9rem;
+      }
     }
   }
 }
